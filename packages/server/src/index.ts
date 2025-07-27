@@ -1,9 +1,10 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 
-import { createSite, querySites } from "./routes/management/site-info";
-import { checkAdminToken } from "./routes/management/middleware/check-header";
 import { createComment, queryComments } from "./routes/client";
+import { getSitePagesWithPagination } from "./routes/management/site-pages";
+import { errorResp } from "./utils/resp";
+import { checkAdminToken } from "./routes/management/middleware/check-token";
 
 const app = new Hono();
 
@@ -14,10 +15,9 @@ app.get("/", (c) => c.text("hello, come!"));
 /**
  * management API
  */
-// 1. check header token for all
+// check header token for all
 app.use("/management/*", checkAdminToken);
-app.get("/management/sites", querySites);
-app.post("/management/sites", createSite);
+app.get("/management/site-pages", getSitePagesWithPagination);
 
 /**
  * client API
@@ -26,7 +26,7 @@ app.get("/client-api/comments", queryComments);
 app.post("/client-api/comment", createComment);
 
 app.all("*", (c) => {
-  return c.text("404 Not Found");
+  return c.json(errorResp("API not found"), 404);
 });
 
 export default app;

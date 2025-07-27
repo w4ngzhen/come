@@ -6,10 +6,6 @@ type MenuItem = Required<MenuProps>["items"][number];
 
 const MENU_ITEMS: MenuItem[] = [
   {
-    key: "sites",
-    label: "站点与页面管理",
-  },
-  {
     key: "site-pages",
     label: "站点页面",
   },

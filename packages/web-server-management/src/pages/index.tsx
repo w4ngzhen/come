@@ -2,9 +2,9 @@ import React from "react";
 import { Navigate, RouteObject } from "react-router-dom";
 import { AppLayout } from "../layout";
 import { Login } from "./login";
-import { SiteInfoPage } from "./site-info";
 import { HomePage } from "./home";
 import { TestPage } from "./test";
+import { SitePages } from "./site-pages";
 
 export const ROUTES: RouteObject[] = [
   {
@@ -20,8 +20,8 @@ export const ROUTES: RouteObject[] = [
         element: <HomePage />,
       },
       {
-        path: "sites",
-        element: <SiteInfoPage />,
+        path: "site-pages",
+        element: <SitePages />,
       },
       {
         path: "test",

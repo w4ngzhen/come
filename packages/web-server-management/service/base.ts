@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { PageInfo, PageResult, ResponseData, SiteInfo } from "@come/common";
+import { PageInfo, PageResult, ResponseData, SitePage } from "@come/common";
 
 const BASE_URL = "http://localhost:8787/management";
 
@@ -9,9 +9,16 @@ export class BaseService {
   constructor() {
     const instance = axios.create({
       baseURL: BASE_URL,
-      headers: {
-        "x-api-token": "123456",
-      },
+    });
+
+    instance.interceptors.request.use((config) => {
+      // set admin auth token
+      const token = localStorage.getItem("COME_ADMIN_AUTH_TOKEN");
+      if (!token) {
+        throw new Error("admin auth token is missing");
+      }
+      config.headers["ADMIN_AUTH_TOKEN"] = token;
+      return config;
     });
 
     // handle response adjust @come/server worker API
@@ -45,11 +52,11 @@ export class BaseService {
 }
 
 class SiteService extends BaseService {
-  async getSiteList(params: {
+  async getSitePagesByPagination(params: {
     pageInfo: PageInfo;
-  }): Promise<PageResult<SiteInfo>> {
+  }): Promise<PageResult<SitePage>> {
     const { pageInfo } = params;
-    return this.axiosInstance.get("/sites", {
+    return this.axiosInstance.get("/site-pages", {
       params: {
         ...pageInfo,
       },
