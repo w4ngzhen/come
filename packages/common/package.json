@@ -1,0 +1,19 @@
+{
+  "name": "@come/common",
+  "version": "0.1.0",
+  "description": "",
+  "type": "commonjs",
+  "main": "./dist/index.js",
+  "types": "./dist",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "packageManager": "pnpm@10.11.0",
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}

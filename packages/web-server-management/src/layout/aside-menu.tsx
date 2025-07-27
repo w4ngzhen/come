@@ -1,0 +1,42 @@
+import { Menu, MenuProps } from "antd";
+import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
+type MenuItem = Required<MenuProps>["items"][number];
+
+const MENU_ITEMS: MenuItem[] = [
+  {
+    key: "sites",
+    label: "站点与页面管理",
+  },
+  {
+    key: "site-pages",
+    label: "站点页面",
+  },
+  {
+    key: "comments",
+    label: "评论管理",
+  },
+  {
+    key: "test",
+    label: "测试",
+  },
+];
+
+export const AsideMenu = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  return (
+    <Menu
+      selectedKeys={[location.pathname.substring(1)]}
+      onClick={(info) => {
+        const { key } = info;
+        navigate(`${!key.startsWith("/") ? "/" : ""}${key}`);
+      }}
+      style={{ width: "100%", height: "100%" }}
+      mode={"vertical"}
+      items={MENU_ITEMS}
+    />
+  );
+};

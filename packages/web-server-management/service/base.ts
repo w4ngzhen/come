@@ -1,0 +1,61 @@
+import axios, { AxiosInstance } from "axios";
+import { PageInfo, PageResult, ResponseData, SiteInfo } from "@come/common";
+
+const BASE_URL = "http://localhost:8787/management";
+
+export class BaseService {
+  protected axiosInstance: AxiosInstance;
+
+  constructor() {
+    const instance = axios.create({
+      baseURL: BASE_URL,
+      headers: {
+        "x-api-token": "123456",
+      },
+    });
+
+    // handle response adjust @come/server worker API
+    instance.interceptors.response.use(
+      (resp) => {
+        const unwrappedResponse = resp.data as ResponseData;
+        if (unwrappedResponse.success) {
+          return unwrappedResponse.data as any;
+        }
+        throw new Error(unwrappedResponse.errorMessage || "unknown error");
+      },
+      (err) => {
+        console.error(err);
+        const errData = err.response?.data as ResponseData;
+        if (errData) {
+          throw new Error(
+            errData.errorMessage ||
+              `API invoked failed: ${err.code ?? "unknown error"}`,
+          );
+        }
+        throw new Error(`API invoked failed: ${err.code ?? "unknown error"}`);
+      },
+    );
+
+    this.axiosInstance = instance;
+  }
+
+  test(): Promise<ResponseData> {
+    return this.axiosInstance.get("/");
+  }
+}
+
+class SiteService extends BaseService {
+  async getSiteList(params: {
+    pageInfo: PageInfo;
+  }): Promise<PageResult<SiteInfo>> {
+    const { pageInfo } = params;
+    return this.axiosInstance.get("/sites", {
+      params: {
+        ...pageInfo,
+      },
+    });
+  }
+}
+
+const SITE_SERVICE = new SiteService();
+export { SITE_SERVICE };
