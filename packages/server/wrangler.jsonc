@@ -24,7 +24,7 @@
    */
   "d1_databases": [
     {
-      "binding": "DB",
+      "binding": "MY_COME_DB",
       "database_name": "db_come",
       "database_id": "<DB_COME_DATABASE_ID>"
     }
@@ -34,7 +34,8 @@
    * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
    */
   "vars": {
-    "ADMIN_AUTH_TOKEN": "<ADMIN_AUTH_TOKEN>"
+    // 注意，"ADMIN_AUTH_TOKEN" 以及 DB_COME_DATABASE_ID 是一个 secret，不能直接配置在 wrangler.jsonc 中
+    // 在本地开发时，只需要在“.dev.vars”中进行定义，并且该vars文件请勿push至公共代码仓库
   }
   /**
    * Note: Use secrets to store sensitive data.

@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from "axios";
 import { PageInfo, PageResult, ResponseData, SitePage } from "@come/common";
 
-const BASE_URL = "http://localhost:8787/management";
+const BASE_URL = "http://test.local:8787/management";
 
 export class BaseService {
   protected axiosInstance: AxiosInstance;
@@ -12,12 +12,12 @@ export class BaseService {
     });
 
     instance.interceptors.request.use((config) => {
-      // set admin auth token
+      // set admin auth token from localStorage
       const token = localStorage.getItem("COME_ADMIN_AUTH_TOKEN");
       if (!token) {
         throw new Error("admin auth token is missing");
       }
-      config.headers["ADMIN_AUTH_TOKEN"] = token;
+      config.headers["X-COME-ADMIN-AUTH-TOKEN"] = token;
       return config;
     });
 
@@ -44,10 +44,6 @@ export class BaseService {
     );
 
     this.axiosInstance = instance;
-  }
-
-  test(): Promise<ResponseData> {
-    return this.axiosInstance.get("/");
   }
 }
 

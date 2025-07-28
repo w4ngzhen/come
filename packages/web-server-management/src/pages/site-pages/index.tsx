@@ -13,7 +13,7 @@ export const SitePages: React.FC = () => {
 
   const columns = [
     {
-      title: "DB UID",
+      title: "uid",
       dataIndex: "uid",
       key: "uid",
     },

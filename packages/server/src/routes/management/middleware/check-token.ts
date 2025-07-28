@@ -9,7 +9,7 @@ export async function checkAdminToken(c: Context, next: Next) {
     );
   }
   const authKey = c.env.ADMIN_AUTH_TOKEN;
-  const reqToken = c.req.header("x-admin-auth-token");
+  const reqToken = c.req.header("X-COME-ADMIN-AUTH-TOKEN");
   if (authKey !== reqToken) {
     return c.json(errorResp("Admin auth token authorized failed"), 401);
   }

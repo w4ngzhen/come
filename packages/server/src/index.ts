@@ -8,7 +8,14 @@ import { checkAdminToken } from "./routes/management/middleware/check-token";
 
 const app = new Hono();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: () => {
+      console.dir("handle cors origin");
+      return "*";
+    },
+  }),
+);
 
 app.get("/", (c) => c.text("hello, come!"));
 
