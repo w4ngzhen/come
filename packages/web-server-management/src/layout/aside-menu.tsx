@@ -11,7 +11,7 @@ const MENU_ITEMS: MenuItem[] = [
   },
   {
     key: "site-comments",
-    label: "评论管理",
+    label: "站点评论",
   },
 ];
 
