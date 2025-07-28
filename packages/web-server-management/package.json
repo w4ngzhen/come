@@ -25,6 +25,7 @@
     "@ant-design/icons": "~5.6.1",
     "@come/common": "workspace:*",
     "@swc/helpers": "^0.5.17",
+    "ahooks": "^3.9.0",
     "antd": "^5.26.6",
     "axios": "^1.11.0",
     "dayjs": "^1.11.13",

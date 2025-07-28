@@ -1,15 +1,15 @@
 import React from "react";
 import { Navigate, RouteObject } from "react-router-dom";
 import { AppLayout } from "../layout";
-import { Login } from "./login";
 import { HomePage } from "./home";
 import { TestPage } from "./test";
 import { SitePages } from "./site-pages";
+import { SetupToken } from "./setup-token";
 
 export const ROUTES: RouteObject[] = [
   {
-    path: "/login",
-    element: <Login />,
+    path: "/setup-token",
+    element: <SetupToken />,
   },
   {
     path: "/",

@@ -1,18 +1,20 @@
 import React, { useEffect } from "react";
 import { Layout } from "antd";
 import * as styles from "./index.module.less";
-import { Outlet, useNavigate, useRoutes } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { AsideMenu } from "./aside-menu";
 import { Header } from "./header";
+import { useLocalAuthToken } from "../hooks";
 
 export const AppLayout = () => {
   const navigate = useNavigate();
+  const { authToken } = useLocalAuthToken();
 
-  // useEffect(() => {
-  //   navigate("/site-info");
-  //   // 导航
-  //   console.debug("AppLayout navigate to /site-info");
-  // }, []);
+  useEffect(() => {
+    if (!authToken) {
+      navigate("/setup-token");
+    }
+  }, [authToken]);
 
   return (
     <Layout className={styles.app_layout}>
