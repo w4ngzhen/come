@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { PageInfo, PageResult, ResponseData, Comment } from "@come/common";
+import { PageInfo, PageResult, Result, Comment } from "@come/common";
 import { message } from "antd";
 
 const BASE_URL = "http://test.local:8787/management-api";
@@ -25,7 +25,7 @@ export class BaseService {
     // handle response adjust @come/server worker API
     instance.interceptors.response.use(
       (resp) => {
-        const unwrappedResponse = resp.data as ResponseData;
+        const unwrappedResponse = resp.data as Result;
         if (unwrappedResponse.success) {
           return unwrappedResponse.data as any;
         }
@@ -42,7 +42,7 @@ export class BaseService {
           });
         }
 
-        const errData = err.response?.data as ResponseData;
+        const errData = err.response?.data as Result;
         if (errData) {
           throw new Error(
             errData.errorMessage ||

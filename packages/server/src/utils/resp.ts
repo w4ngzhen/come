@@ -1,13 +1,16 @@
-import { ResponseData } from "@come/common";
+import { Result } from "@come/common";
 
-export function successResp<T = unknown>(data?: T): ResponseData<T> {
+export function okRes<T = unknown>(data?: T): Result<T> {
   return {
     success: true,
     data,
   };
 }
 
-export function errorResp(err?: string | object): ResponseData {
+export function errRes<T = unknown>(
+  err?: string | object,
+  data?: T,
+): Result<T> {
   let errMsg: string | undefined;
   if (typeof err === "string") {
     errMsg = err;
@@ -20,5 +23,6 @@ export function errorResp(err?: string | object): ResponseData {
   return {
     success: false,
     errorMessage: errMsg,
+    data: data,
   };
 }

@@ -1,0 +1,15 @@
+### GET request to example server
+POST http://test.local:8787/client-api/comment
+Content-Type: application/json
+x-come-admin-auth-token: 123456
+
+{
+  "siteKey": "test",
+  "pageKey": "test",
+  "userNickname": "test",
+  "userEmail": "@test.com",
+  "content": "",
+  "relatedCommentUid": 1
+}
+
+###

@@ -1,7 +1,7 @@
 import type { Context } from "hono";
 import { extractGetReqOffsetAndLimit } from "../../utils/req";
 import { Comment, PageResult } from "@come/common";
-import { successResp } from "../../utils/resp";
+import { okRes } from "../../utils/resp";
 
 /**
  * 分页查询页面记录
@@ -36,7 +36,7 @@ export async function getCommentsWithPagination(c: Context) {
       itemList: comments,
     };
 
-    return c.json(successResp(pageResult));
+    return c.json(okRes(pageResult));
   } catch (error) {
     // 处理 error 类型未知的问题
     const errorMessage =

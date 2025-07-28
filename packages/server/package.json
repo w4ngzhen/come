@@ -10,8 +10,9 @@
     "db:init-local": "wrangler d1 execute db_come --local --file=./db_schema/create_tables.sql"
   },
   "dependencies": {
+    "@come/common": "workspace:*",
     "hono": "^4.6.20",
-    "@come/common": "workspace:*"
+    "zod": "^4.0.10"
   },
   "devDependencies": {
     "@types/node": "22.13.0",

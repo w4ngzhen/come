@@ -1,4 +1,22 @@
 /**
+ * 结果结构体
+ */
+export interface Result<T = unknown> {
+  /**
+   * 响应状态
+   */
+  success: boolean;
+  /**
+   * 出错相应内容
+   */
+  errorMessage?: string;
+  /**
+   * 响应数据
+   */
+  data?: T;
+}
+
+/**
  * data page info
  * 数据分页信息
  */
@@ -30,23 +48,4 @@ export interface PageResult<TItem = unknown> {
    * 数据列表
    */
   itemList: TItem[];
-}
-
-/**
- * response data struct
- * 响应数据结构
- */
-export interface ResponseData<T = unknown> {
-  /**
-   * 响应状态
-   */
-  success: boolean;
-  /**
-   * 出错相应内容
-   */
-  errorMessage?: string;
-  /**
-   * 响应数据
-   */
-  data?: T;
 }

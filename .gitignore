@@ -173,3 +173,5 @@ dist
 **/.wrangler/
 
 .idea/
+
+**/req_test

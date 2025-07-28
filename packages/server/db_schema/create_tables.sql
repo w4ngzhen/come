@@ -2,6 +2,7 @@
 CREATE TABLE IF NOT EXISTS tb_comments
 (
     uid                 INTEGER PRIMARY KEY AUTOINCREMENT,
+    site_key            TEXT    NOT NULL,
     page_key            TEXT    NOT NULL,
     user_nickname       TEXT    NOT NULL,
     user_email_id       TEXT    NOT NULL,

@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 
 import { createComment, queryComments } from "./routes/client";
-import { errorResp } from "./utils/resp";
+import { errRes } from "./utils/resp";
 import { checkAdminToken } from "./routes/management/middleware/check-token";
 import { getCommentsWithPagination } from "./routes/management/comments";
 
@@ -33,7 +33,7 @@ app.get("/client-api/comments", queryComments);
 app.post("/client-api/comment", createComment);
 
 app.all("*", (c) => {
-  return c.json(errorResp("API not found"), 404);
+  return c.json(errRes("API not found"), 404);
 });
 
 export default app;
