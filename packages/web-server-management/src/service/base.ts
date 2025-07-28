@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import { PageInfo, PageResult, ResponseData, SitePage } from "@come/common";
+import { message } from "antd";
 
 const BASE_URL = "http://test.local:8787/management";
 
@@ -31,13 +32,24 @@ export class BaseService {
         throw new Error(unwrappedResponse.errorMessage || "unknown error");
       },
       (err) => {
-        console.error(err);
+        console.error("API invoking error", err);
+
+        if (err.status === 401) {
+          // 用户认证失败，跳转只token设置页面
+          message.error("token验证失败，即将跳转token设置页面", 2).then(() => {
+            window.location.href = "/setup-token";
+          });
+        }
+
         const errData = err.response?.data as ResponseData;
         if (errData) {
           throw new Error(
             errData.errorMessage ||
               `API invoked failed: ${err.code ?? "unknown error"}`,
           );
+        }
+        if (err instanceof Error) {
+          throw err;
         }
         throw new Error(`API invoked failed: ${err.code ?? "unknown error"}`);
       },

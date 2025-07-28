@@ -10,12 +10,8 @@ const MENU_ITEMS: MenuItem[] = [
     label: "站点页面",
   },
   {
-    key: "comments",
+    key: "site-comments",
     label: "评论管理",
-  },
-  {
-    key: "test",
-    label: "测试",
   },
 ];
 

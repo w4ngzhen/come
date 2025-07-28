@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Table, message } from "antd";
 import type { SitePage } from "/Users/w4ngzhen/projects/web-projects/come/packages/common/src/index.ts";
-import { SITE_SERVICE } from "../../../service/base";
 import { Page } from "../../layout/page";
+import { SITE_SERVICE } from "../../service/base";
 
 export const SitePages: React.FC = () => {
   const [dataSource, setDataSource] = useState<SitePage[]>([]);
@@ -43,8 +43,7 @@ export const SitePages: React.FC = () => {
       setCurrentPage(page);
       setPageSize(pageSize);
     } catch (error) {
-      console.error("Error fetching site pages:", error);
-      message.error("Failed to fetch site pages");
+      message.error(`获取站点页面失败: ${error.message || "未知错误"}`);
     } finally {
       setLoading(false);
     }

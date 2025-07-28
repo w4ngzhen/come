@@ -7,6 +7,8 @@ export const useLocalAuthToken = () => {
     "COME_ADMIN_AUTH_TOKEN",
     {
       defaultValue: "",
+      serializer: (value) => value,
+      deserializer: (value) => value,
     },
   );
 
