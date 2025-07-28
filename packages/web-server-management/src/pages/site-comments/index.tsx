@@ -1,6 +1,6 @@
 import React from "react";
-import { Page } from "../../layout/page";
+import { PageContentWrapper } from "../../components/page-content-wrapper";
 
 export const SiteComments = () => {
-  return <Page title={"站点评论"}>hello</Page>;
+  return <PageContentWrapper title={"站点评论"}></PageContentWrapper>;
 };

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Table, message } from "antd";
 import type { SitePage } from "/Users/w4ngzhen/projects/web-projects/come/packages/common/src/index.ts";
-import { Page } from "../../layout/page";
 import { SITE_SERVICE } from "../../service/base";
+import { PageContentWrapper } from "../../components/page-content-wrapper";
 
 export const SitePages: React.FC = () => {
   const [dataSource, setDataSource] = useState<SitePage[]>([]);
@@ -58,7 +58,7 @@ export const SitePages: React.FC = () => {
   };
 
   return (
-    <Page title={"站点页面"}>
+    <PageContentWrapper title={"站点页面"}>
       <Table
         columns={columns}
         dataSource={dataSource}
@@ -71,6 +71,6 @@ export const SitePages: React.FC = () => {
         }}
         rowKey="uid"
       />
-    </Page>
+    </PageContentWrapper>
   );
 };

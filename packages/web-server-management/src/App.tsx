@@ -1,7 +1,7 @@
 import React from "react";
 import * as styles from "./App.module.less";
 import { BrowserRouter, useRoutes } from "react-router-dom";
-import { ROUTES } from "./pages";
+import { ROUTES } from "./routes";
 
 export const App = () => {
   return (

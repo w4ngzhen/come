@@ -7,10 +7,10 @@ interface IProps {
   children?: ReactNode;
 }
 
-export const Page = (props: IProps) => {
+export const PageContentWrapper = (props: IProps) => {
   const { title, children } = props;
   return (
-    <div className={styles.page}>
+    <div className={styles.page_content_wrapper}>
       <div className={styles.title}>{title}</div>
       <div className={styles.content}>{children}</div>
     </div>

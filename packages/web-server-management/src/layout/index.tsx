@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import { Layout } from "antd";
 import * as styles from "./index.module.less";
 import { Outlet, useNavigate } from "react-router-dom";
-import { AsideMenu } from "./aside-menu";
 import { Header } from "./header";
 import { useLocalAuthToken } from "../hooks";
+import { AsideMenu } from "./aside";
 
 export const AppLayout = () => {
   const navigate = useNavigate();
@@ -13,6 +13,8 @@ export const AppLayout = () => {
   useEffect(() => {
     if (!authToken) {
       navigate("/setup-token");
+    } else {
+      navigate("/site-pages");
     }
   }, [authToken]);
 
