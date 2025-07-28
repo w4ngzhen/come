@@ -2,9 +2,9 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 
 import { createComment, queryComments } from "./routes/client";
-import { getSitePagesWithPagination } from "./routes/management/site-pages";
 import { errorResp } from "./utils/resp";
 import { checkAdminToken } from "./routes/management/middleware/check-token";
+import { getCommentsWithPagination } from "./routes/management/comments";
 
 const app = new Hono();
 
@@ -23,8 +23,8 @@ app.get("/", (c) => c.text("hello, come!"));
  * management API
  */
 // check header token for all
-app.use("/management/*", checkAdminToken);
-app.get("/management/site-pages", getSitePagesWithPagination);
+app.use("/management-api/*", checkAdminToken);
+app.get("/management-api/comments", getCommentsWithPagination);
 
 /**
  * client API

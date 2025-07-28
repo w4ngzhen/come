@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Table, message } from "antd";
-import type { SitePage } from "/Users/w4ngzhen/projects/web-projects/come/packages/common/src/index.ts";
 import { SITE_SERVICE } from "../../service/base";
 import { PageContentWrapper } from "../../components/page-content-wrapper";
+import { Comment } from "@come/common";
 
-export const SitePages: React.FC = () => {
-  const [dataSource, setDataSource] = useState<SitePage[]>([]);
+export const CommentsManagement: React.FC = () => {
+  const [dataSource, setDataSource] = useState<Comment[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,7 +32,7 @@ export const SitePages: React.FC = () => {
   const loadData = async (page: number, pageSize: number) => {
     setLoading(true);
     try {
-      const result = await SITE_SERVICE.getSitePagesByPagination({
+      const result = await SITE_SERVICE.queryCommentsWithPagination({
         pageInfo: {
           pageNumber: page,
           pageSize,
@@ -58,7 +58,7 @@ export const SitePages: React.FC = () => {
   };
 
   return (
-    <PageContentWrapper title={"站点页面"}>
+    <PageContentWrapper title={"评论管理"}>
       <Table
         columns={columns}
         dataSource={dataSource}

@@ -1,13 +1,13 @@
 import type { Context } from "hono";
 import { extractGetReqOffsetAndLimit } from "../../utils/req";
-import { PageResult, SitePage } from "@come/common";
+import { Comment, PageResult } from "@come/common";
 import { successResp } from "../../utils/resp";
 
 /**
  * 分页查询页面记录
  * ${api-path}?pageNumber=1&pageSize=10
  */
-export async function getSitePagesWithPagination(c: Context) {
+export async function getCommentsWithPagination(c: Context) {
   try {
     const { limit, offset } = extractGetReqOffsetAndLimit(c);
 
@@ -18,22 +18,22 @@ export async function getSitePagesWithPagination(c: Context) {
     // 查询指定页的数据
     const result = await db
       .prepare(
-        "SELECT uid, page_key, page_name FROM tb_site_pages LIMIT ? OFFSET ?",
+        "SELECT uid, page_key, user_nickname, user_email_id, user_email, content, submit_time, status, related_comment_uid FROM tb_comments LIMIT ? OFFSET ?",
       )
       .bind(limit, offset)
       .all();
 
-    const pages = result.results as SitePage[];
+    const comments = result.results as Comment[];
 
     // 查询总记录数
     const countResult = await db
-      .prepare("SELECT COUNT(*) as total FROM tb_site_pages")
+      .prepare("SELECT COUNT(*) as total FROM tb_comments")
       .first();
 
     const total = countResult?.total || 0;
-    const pageResult: PageResult<SitePage> = {
+    const pageResult: PageResult<Comment> = {
       total,
-      itemList: pages,
+      itemList: comments,
     };
 
     return c.json(successResp(pageResult));

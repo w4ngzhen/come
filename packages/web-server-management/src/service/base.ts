@@ -1,8 +1,8 @@
 import axios, { AxiosInstance } from "axios";
-import { PageInfo, PageResult, ResponseData, SitePage } from "@come/common";
+import { PageInfo, PageResult, ResponseData, Comment } from "@come/common";
 import { message } from "antd";
 
-const BASE_URL = "http://test.local:8787/management";
+const BASE_URL = "http://test.local:8787/management-api";
 
 export class BaseService {
   protected axiosInstance: AxiosInstance;
@@ -37,7 +37,8 @@ export class BaseService {
         if (err.status === 401) {
           // 用户认证失败，跳转只token设置页面
           message.error("token验证失败，即将跳转token设置页面", 2).then(() => {
-            window.location.href = "/setup-token";
+            localStorage.removeItem("COME_ADMIN_AUTH_TOKEN");
+            window.location.href = "/token-management";
           });
         }
 
@@ -60,11 +61,11 @@ export class BaseService {
 }
 
 class SiteService extends BaseService {
-  async getSitePagesByPagination(params: {
+  async queryCommentsWithPagination(params: {
     pageInfo: PageInfo;
-  }): Promise<PageResult<SitePage>> {
+  }): Promise<PageResult<Comment>> {
     const { pageInfo } = params;
-    return this.axiosInstance.get("/site-pages", {
+    return this.axiosInstance.get("/comments", {
       params: {
         ...pageInfo,
       },

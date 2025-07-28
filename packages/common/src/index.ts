@@ -1,36 +1,20 @@
 export { PageInfo, ResponseData, PageResult } from "./base";
 
 /**
- * site page(s) info
- */
-export interface SitePage {
-  /**
-   * db uid, primary key
-   * 数据库ID，主键
-   */
-  uid: number;
-  /**
-   * page key
-   * 页面key
-   */
-  pageKey: string;
-  /**
-   * page name
-   * 页面名称
-   */
-  pageName: string;
-}
-
-/**
  * page comment(s)
  * 页面评论
  */
-export interface PageComment {
+export interface Comment {
   /**
    * db uid, primary key
    * 数据库ID，主键
    */
   uid: number;
+  /**
+   * site key
+   * 站点key
+   */
+  siteKey: string;
   /**
    * page key
    * 页面key

@@ -12,9 +12,9 @@ export const AppLayout = () => {
 
   useEffect(() => {
     if (!authToken) {
-      navigate("/setup-token");
+      navigate("/token-management");
     } else {
-      navigate("/site-pages");
+      navigate("/comments-management");
     }
   }, [authToken]);
 
