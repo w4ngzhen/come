@@ -7,6 +7,7 @@ import { ErrorTip, IconArrow, Spin } from "./components/basic";
 import { CommentList } from "./components/CommentList";
 
 import "./CommentBoxComponent.less";
+import { CommentEditor } from "./components/CommentEditor";
 
 const baseCls = baseClassSupplier("root");
 
@@ -24,7 +25,7 @@ export const CommentBoxComponent = (props: CommentBoxComponentProps) => {
     error?: string;
     comments?: Comment[];
   }>({
-    loading: true,
+    loading: false,
   });
 
   const loadComments = async () => {
@@ -40,12 +41,15 @@ export const CommentBoxComponent = (props: CommentBoxComponentProps) => {
   }
 
   const renderCommentList = () => {
-    const { loading, error, comments } = loadCommentsResult;
+    const { loading, error, comments = [] } = loadCommentsResult;
     if (loading) {
       return <Spin />;
     }
     if (error) {
       return <ErrorTip error={error} />;
+    }
+    if (comments.length === 0) {
+      return <div className={baseCls("no-comment")}>暂无评论</div>;
     }
     return <CommentList comments={comments} />;
   };
@@ -57,11 +61,10 @@ export const CommentBoxComponent = (props: CommentBoxComponentProps) => {
       }}
     >
       <div className={baseCls()}>
-        <button className={baseCls("leave-msg-button")} onClick={() => {}}>
-          <span>Leave a message</span>
-          <IconArrow />
-        </button>
-        <div className={baseCls("content")}>{renderCommentList()}</div>
+        <div className={baseCls("input-wrapper")}>
+          <CommentEditor />
+        </div>
+        <div className={baseCls("list-wrapper")}>{renderCommentList()}</div>
       </div>
     </OptionsContext.Provider>
   );
