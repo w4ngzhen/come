@@ -12,29 +12,29 @@ export interface Comment {
    * site key
    * 站点key
    */
-  siteKey: string;
+  site_key: string;
   /**
    * page key
    * 页面key
    */
-  pageKey: string;
-  /**
-   * The nickname of the person who left the comment
-   * 评论者昵称
-   */
-  userNickname: string;
+  page_key: string;
   /**
    * email id after algorithm digest
    * 邮箱ID（经过算法摘要存储）
    */
-  userEmailId: string;
+  user_email_id: string;
+  /**
+   * The nickname of the person who left the comment
+   * 评论者昵称
+   */
+  user_nickname: string;
   /**
    * desensitized email string
    * for example, "abc@xxx.com" will convert to "a***c@xxx.com"
    * 脱敏后的邮箱字符串
    * 例如，"abc@xxx.com" 会转换为 "a***c@xxx.com"
    */
-  userEmail: string;
+  user_email: string;
   /**
    * the comment content
    * 评论内容
@@ -45,7 +45,7 @@ export interface Comment {
    * UTC second timestamp
    * 评论提交时间（使用UTC 秒时间戳）
    */
-  submitTime: number;
+  submit_time: number;
   /**
    * comment status
    * 评论状态
@@ -61,5 +61,5 @@ export interface Comment {
    * 如果此评论是对另一条评论的回复，
    * 则此字段将记录上下文评论的ID。
    */
-  relatedCommentUid?: number;
+  related_comment_uid?: number;
 }

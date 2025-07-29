@@ -9,7 +9,7 @@ export interface Result<T = unknown> {
   /**
    * 出错相应内容
    */
-  errorMessage?: string;
+  err_msg?: string;
   /**
    * 响应数据
    */
@@ -25,12 +25,26 @@ export interface PageInfo {
    * page number, base 1(not 0)
    * 页码，基于1的页码
    */
-  pageNumber: number;
+  page_number: number;
   /**
    * page size
    * 每页数量
    */
-  pageSize: number;
+  page_size: number;
+}
+
+/**
+ * 排序
+ */
+export interface SortInfo {
+  /**
+   * 排序字段
+   */
+  sort_field?: string;
+  /**
+   * 排序方向
+   */
+  sort_order?: "asc" | "desc";
 }
 
 /**
@@ -47,5 +61,5 @@ export interface PageResult<TItem = unknown> {
    * item list
    * 数据列表
    */
-  itemList: TItem[];
+  items: TItem[];
 }

@@ -4,7 +4,7 @@ import { cors } from "hono/cors";
 import { createComment, queryComments } from "./routes/client";
 import { errRes } from "./utils/resp";
 import { checkAdminToken } from "./routes/management/middleware/check-token";
-import { getCommentsWithPagination } from "./routes/management/comments";
+import { getComments } from "./routes/management/comments";
 
 const app = new Hono();
 
@@ -24,7 +24,7 @@ app.get("/", (c) => c.text("hello, come!"));
  */
 // check header token for all
 app.use("/management-api/*", checkAdminToken);
-app.get("/management-api/comments", getCommentsWithPagination);
+app.get("/management-api/comments", getComments);
 
 /**
  * client API

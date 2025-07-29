@@ -22,7 +22,7 @@ export function errRes<T = unknown>(
 
   return {
     success: false,
-    errorMessage: errMsg,
+    err_msg: errMsg,
     data: data,
   };
 }

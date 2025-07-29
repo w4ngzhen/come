@@ -1,5 +1,5 @@
 export function convertStrToIntNumber(
-  str: string | undefined | null,
+  str: string | undefined | null | number,
   defaultNum: number,
 ) {
   if (typeof str === "number") {

@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { PageInfo, PageResult, Result, Comment } from "@come/common";
+import { PageInfo, PageResult, Result, Comment, SortInfo } from "@come/common";
 import { message } from "antd";
 
 const BASE_URL = "http://test.local:8787/management-api";
@@ -29,7 +29,7 @@ export class BaseService {
         if (unwrappedResponse.success) {
           return unwrappedResponse.data as any;
         }
-        throw new Error(unwrappedResponse.errorMessage || "unknown error");
+        throw new Error(unwrappedResponse.err_msg || "unknown error");
       },
       (err) => {
         console.error("API invoking error", err);
@@ -45,7 +45,7 @@ export class BaseService {
         const errData = err.response?.data as Result;
         if (errData) {
           throw new Error(
-            errData.errorMessage ||
+            errData.err_msg ||
               `API invoked failed: ${err.code ?? "unknown error"}`,
           );
         }
@@ -60,14 +60,25 @@ export class BaseService {
   }
 }
 
+export type QueryCommentsFilter = {
+  user_nickname?: string;
+  content?: string;
+  status?: Array<number>;
+};
+
 class SiteService extends BaseService {
-  async queryCommentsWithPagination(params: {
-    pageInfo: PageInfo;
+  async queryComments(params: {
+    pageInfo?: PageInfo;
+    sorterInfo?: SortInfo;
+    filters?: QueryCommentsFilter;
   }): Promise<PageResult<Comment>> {
-    const { pageInfo } = params;
+    const { pageInfo, sorterInfo, filters } = params;
     return this.axiosInstance.get("/comments", {
       params: {
         ...pageInfo,
+        ...sorterInfo,
+        ...filters,
+        status: filters?.status?.join(",") || "",
       },
     });
   }

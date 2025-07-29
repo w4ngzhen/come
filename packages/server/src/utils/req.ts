@@ -2,17 +2,18 @@ import { Context } from "hono";
 import { convertStrToIntNumber } from "./parser";
 
 /**
- *
+ * 从GET请求中提取分页参数
  * @param c
  */
 export function extractGetReqOffsetAndLimit(c: Context): {
   offset: number;
   limit: number;
 } {
-  const pageNumber = convertStrToIntNumber(c.req.param("pageNumber"), 1);
-  const pageSize = convertStrToIntNumber(c.req.param("pageSize"), 10);
+  const { page_number = 1, page_size = 10 } = c.req.query();
+  const handledPageNumber = convertStrToIntNumber(page_number, 1);
+  const handledPageSize = convertStrToIntNumber(page_size, 10);
   return {
-    limit: pageSize,
-    offset: (pageNumber - 1) * pageSize,
+    limit: handledPageSize,
+    offset: (handledPageNumber - 1) * handledPageSize,
   };
 }

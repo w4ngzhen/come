@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@come/common": "workspace:*",
+    "drizzle-orm": "^0.44.3",
     "hono": "^4.6.20",
     "zod": "^4.0.10"
   },

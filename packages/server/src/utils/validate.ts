@@ -2,7 +2,12 @@ import { z } from "zod";
 import { errRes, okRes } from "./resp";
 import { Result } from "@come/common";
 
-export function zodParse<T>(rawData: T, schema: z.ZodObject): Result<T> {
+/**
+ * 使用zod校验数据
+ * @param rawData
+ * @param schema
+ */
+export function validateByZod<T>(rawData: T, schema: z.ZodObject): Result<T> {
   try {
     const result = schema.safeParse(rawData);
     if (result.success) {

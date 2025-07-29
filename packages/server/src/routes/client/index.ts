@@ -4,7 +4,10 @@ import { Context } from "hono";
 import { ReqCreateComment } from "@come/common";
 import { z } from "zod";
 import { md5 } from "hono/utils/crypto";
-import { zodParse } from "../../utils/validate";
+import { validateByZod } from "../../utils/validate";
+import { drizzleDbWrapper } from "../../db";
+import { tb_comments } from "../../db/schema";
+import { nowUtcSeconds } from "../../utils/date";
 
 export async function queryComments(c: Context) {
   const { offset, limit } = extractGetReqOffsetAndLimit(c);
@@ -14,41 +17,40 @@ export async function queryComments(c: Context) {
 export async function createComment(c: Context) {
   const rawReq = (await c.req.json()) as ReqCreateComment;
 
-  const parseRes = zodParse(rawReq, CreateCommentValidateSchema);
+  const parseRes = validateByZod(rawReq, CreateCommentValidateSchema);
   if (!parseRes.success) {
     return c.json(parseRes, 400);
   }
   const req: ReqCreateComment = parseRes.data;
 
   const {
-    siteKey,
-    pageKey,
-    userNickname,
-    userEmail,
+    site_key,
+    page_key,
+    user_nickname,
+    user_email: rawUserEmail,
     content,
-    relatedCommentUid,
+    related_comment_uid,
   } = req;
 
-  const userEmailId = await md5(userEmail);
+  const userEmailId = await md5(rawUserEmail);
+  const userEmail = await maskEmail(rawUserEmail);
 
   try {
     const start = performance.now();
-    const db = c.env.MY_COME_DB;
+    const db = drizzleDbWrapper(c);
     const dbRes = await db
-      .prepare(
-        "INSERT INTO tb_comments (site_key, page_key, user_nickname, user_email_id, user_email, content, status, submit_time, related_comment_uid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-      )
-      .bind(
-        siteKey,
-        pageKey,
-        userNickname,
-        userEmailId,
-        maskEmail(userEmail),
-        content,
-        1,
-        new Date().getTime(),
-        relatedCommentUid,
-      )
+      .insert(tb_comments)
+      .values({
+        site_key: site_key,
+        page_key: page_key,
+        user_nickname: user_nickname,
+        user_email_id: userEmailId,
+        user_email: userEmail,
+        content: content,
+        status: 1,
+        submit_time: nowUtcSeconds(),
+        related_comment_uid: related_comment_uid,
+      })
       .run();
 
     if (dbRes.success) {
@@ -65,18 +67,18 @@ export async function createComment(c: Context) {
  * 创建评论参数校验
  */
 const CreateCommentValidateSchema = z.object({
-  siteKey: z.string().min(1, "siteKey 不能为空"),
-  pageKey: z.string().min(1, "pageKey 不能为空"),
-  userNickname: z
+  site_key: z.string().min(1, "siteKey 不能为空"),
+  page_key: z.string().min(1, "pageKey 不能为空"),
+  user_nickname: z
     .string()
     .min(1, "用户昵称不能为空")
     .max(50, "昵称长度不能超过50"),
-  userEmail: z.email("邮箱格式不正确"),
+  user_email: z.email("邮箱格式不正确"),
   content: z
     .string()
     .min(1, "评论内容不能为空")
     .max(500, "评论内容不能超过500字符"),
-  relatedCommentUid: z.number().int().optional(), // 可选字段
+  related_comment_uid: z.number().int().optional(), // 可选字段
 });
 
 /**

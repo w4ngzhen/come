@@ -6,20 +6,20 @@ export interface ReqCreateComment {
    * site key
    * 站点key
    */
-  siteKey: string;
+  site_key: string;
   /**
    * page key
    * 页面key
    */
-  pageKey: string;
+  page_key: string;
   /**
    * 评论人昵称
    */
-  userNickname: string;
+  user_nickname: string;
   /**
    * 评论人邮箱
    */
-  userEmail: string;
+  user_email: string;
   /**
    * 评论内容
    */
@@ -27,5 +27,5 @@ export interface ReqCreateComment {
   /**
    * 关联的评论ID
    */
-  relatedCommentUid?: number;
+  related_comment_uid?: number;
 }

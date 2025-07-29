@@ -1,15 +1,11 @@
-### GET request to example server
 POST http://test.local:8787/client-api/comment
 Content-Type: application/json
 x-come-admin-auth-token: 123456
 
 {
-  "siteKey": "test",
-  "pageKey": "test",
-  "userNickname": "test",
-  "userEmail": "@test.com",
-  "content": "",
-  "relatedCommentUid": 1
+  "site_key": "test1",
+  "page_key": "test1",
+  "user_nickname": "test1",
+  "user_email": "test1@test.com",
+  "content": "hello1"
 }
-
-###
