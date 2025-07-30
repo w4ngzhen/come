@@ -26,45 +26,49 @@ export async function getComments(c: Context) {
 
     const db = drizzleDbWrapper(c);
 
-    const baseQuery = db.select().from(tb_comments);
-    if (user_nickname) {
-      baseQuery.where(like(tb_comments.user_nickname, `%${user_nickname}%`));
-    }
-    if (content) {
-      baseQuery.where(like(tb_comments.content, `%${content}%`));
-    }
-    if (status) {
-      const statusList = status
-        .split(",")
-        .map((item) => parseInt(item?.trim()))
-        .filter((item) => !isNaN(item));
-      if (statusList.length > 0) {
-        baseQuery.where(inArray(tb_comments.status, statusList));
+    function createBaseQuery() {
+      const baseQuery = db.select().from(tb_comments);
+      if (user_nickname) {
+        baseQuery.where(like(tb_comments.user_nickname, `%${user_nickname}%`));
       }
-    }
-    if (sort_field) {
-      // 目前只支持提交时间排序
-      const field = {
-        submit_time: tb_comments.submit_time,
-      }[sort_field];
+      if (content) {
+        baseQuery.where(like(tb_comments.content, `%${content}%`));
+      }
+      if (status) {
+        const statusList = status
+          .split(",")
+          .map((item) => parseInt(item?.trim()))
+          .filter((item) => !isNaN(item));
+        if (statusList.length > 0) {
+          baseQuery.where(inArray(tb_comments.status, statusList));
+        }
+      }
+      if (sort_field) {
+        // 目前只支持提交时间排序
+        const field = {
+          submit_time: tb_comments.submit_time,
+        }[sort_field];
 
-      if (field) {
-        baseQuery.orderBy(sort_order === "asc" ? asc(field) : desc(field));
+        if (field) {
+          baseQuery.orderBy(sort_order === "asc" ? asc(field) : desc(field));
+        }
       }
+      return baseQuery;
     }
 
     // 查询对应条件下所有记录
-    const dataQuery = baseQuery.limit(limit).offset(offset);
+    const dataQuery = createBaseQuery().limit(limit).offset(offset);
     const result = await dataQuery.run();
     const comments = result.results as Comment[];
 
     // 查询总记录数
     const countResult = await db
       .select({ total: count() })
-      .from(baseQuery.as("sub_query"))
+      .from(createBaseQuery().as("sub_query"))
       .run();
 
-    const total = countResult?.[0]?.total || 0;
+    const total = countResult?.results?.[0]?.["count(*)"] || 0;
+
     const pageResult: PageResult<Comment> = {
       total,
       items: comments,

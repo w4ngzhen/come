@@ -8,6 +8,7 @@ import { CommentList } from "./components/CommentList";
 import * as styles from "./CommentBoxComponent.module.less";
 import { CommentEditor } from "./components/CommentEditor";
 import { ComeCommentApi } from "./api";
+import { SimplePager } from "./components/SimplePager";
 
 interface CommentBoxComponentProps {
   options: ConfigOptions;
@@ -18,7 +19,7 @@ export const CommentBoxComponent = (props: CommentBoxComponentProps) => {
   const [commentApi] = useState<ComeCommentApi>(new ComeCommentApi(options));
   const [pageInfo, setPageInfo] = useState<PageInfo>({
     page_number: 1,
-    page_size: 5,
+    page_size: 2,
   });
 
   const [comments, setComments] = useState<Comment[]>([]);
@@ -55,7 +56,24 @@ export const CommentBoxComponent = (props: CommentBoxComponentProps) => {
     if (comments.length === 0) {
       return <div className={styles.no_comment}>暂无评论</div>;
     }
-    return <CommentList comments={comments} />;
+    return (
+      <>
+        <CommentList comments={comments} />
+        <SimplePager
+          total={total}
+          pageNumber={pageInfo.page_number}
+          pageSize={pageInfo.page_size}
+          onPageChange={(pageNumber) => {
+            const nextPageInfo = {
+              ...pageInfo,
+              page_number: pageNumber,
+            };
+            setPageInfo(nextPageInfo);
+            loadComments(nextPageInfo);
+          }}
+        />
+      </>
+    );
   };
 
   return (

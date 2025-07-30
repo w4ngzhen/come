@@ -20,28 +20,35 @@ export async function queryComments(c: Context) {
     const { offset, limit } = extractGetReqOffsetAndLimit(c);
     const { site_key, page_key } = c.req.query();
     const db = drizzleDbWrapper(c);
-    const baseQuery = db
-      .select()
-      .from(tb_comments)
-      .where(
-        and(
-          eq(tb_comments.site_key, site_key),
-          eq(tb_comments.page_key, page_key),
-          eq(tb_comments.status, 1), // 只查询已通过的评论
-        ),
-      )
-      .orderBy(desc(tb_comments.submit_time)); // 时间始终降序，显示最新
+
+    /**
+     * 因为SelectBuilder是可变对象，所以查询和查全部需要重新构建
+     */
+    function createBaseQuery() {
+      return db
+        .select()
+        .from(tb_comments)
+        .where(
+          and(
+            eq(tb_comments.site_key, site_key),
+            eq(tb_comments.page_key, page_key),
+            eq(tb_comments.status, 1), // 只查询已通过的评论
+          ),
+        )
+        .orderBy(desc(tb_comments.submit_time)); // 时间始终降序，显示最新
+    }
 
     // 查询该条件下的分页数据
-    const dataQuery = baseQuery.limit(limit).offset(offset);
+    const dataQuery = createBaseQuery().limit(limit).offset(offset);
     const result = await dataQuery.run();
     const comments = result.results as Comment[];
     // 查询该条件下的总数
     const countResult = await db
       .select({ total: count() })
-      .from(baseQuery.as("sub_query"))
+      .from(createBaseQuery().as("sub_query"))
       .run();
-    const total = countResult?.[0]?.total || 0;
+
+    const total = countResult?.results?.[0]?.["count(*)"] || 0;
 
     const pageResult: PageResult<Comment> = {
       total,
