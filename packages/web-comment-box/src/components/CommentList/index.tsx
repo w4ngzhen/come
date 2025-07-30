@@ -16,6 +16,7 @@ export const CommentList = (props: ICommentListProps) => {
         {comments.map((comment) => {
           return (
             <CommentItem
+              key={comment.uid}
               commentData={comment}
               className={styles.item_wrapper}
             />

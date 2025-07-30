@@ -82,16 +82,9 @@ export const CommentsManagement: React.FC = () => {
       render: (status: number) => COMMENT_STATUS_MAP[status] || "未知",
     },
     {
-      title: "关联评论ID",
-      dataIndex: "related_comment_uid",
-      key: "related_comment_uid",
-      width: 120,
-      render: (uid?: number) => uid || "-",
-    },
-    {
       title: "提交时间",
-      dataIndex: "submit_time",
-      key: "submit_time",
+      dataIndex: "submit_at",
+      key: "submit_at",
       width: 180,
       render: (time: number) => formatUnixTime(time), // 格式化时间戳
       sorter: true, // 启用排序

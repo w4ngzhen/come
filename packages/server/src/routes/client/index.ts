@@ -35,7 +35,7 @@ export async function queryComments(c: Context) {
             eq(tb_comments.status, 1), // 只查询已通过的评论
           ),
         )
-        .orderBy(desc(tb_comments.submit_time)); // 时间始终降序，显示最新
+        .orderBy(desc(tb_comments.submit_at)); // 时间始终降序，显示最新
     }
 
     // 查询该条件下的分页数据
@@ -78,10 +78,9 @@ export async function createComment(c: Context) {
     user_nickname,
     user_email: rawUserEmail,
     content,
-    related_comment_uid,
   } = req;
 
-  const userEmailId = await md5(rawUserEmail);
+  const userId = await md5(rawUserEmail);
   const userEmail = await maskEmail(rawUserEmail);
 
   try {
@@ -92,13 +91,12 @@ export async function createComment(c: Context) {
       .values({
         site_key: site_key,
         page_key: page_key,
+        user_id: userId,
         user_nickname: user_nickname,
-        user_email_id: userEmailId,
         user_email: userEmail,
         content: content,
         status: 1,
-        submit_time: nowUtcSeconds(),
-        related_comment_uid: related_comment_uid,
+        submit_at: nowUtcSeconds(),
       })
       .run();
 

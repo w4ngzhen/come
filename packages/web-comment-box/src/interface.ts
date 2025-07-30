@@ -1,3 +1,6 @@
+/**
+ * ComeCommentBox 配置
+ */
 export interface ConfigOptions {
   /**
    * 评论服务地址，例如http://xxx.com
@@ -13,4 +16,15 @@ export interface ConfigOptions {
    * 当前评论列表所属页面标识
    */
   pageKey: string;
+  /**
+   * 评论列表分页大小
+   * @default 5
+   */
+  commentListPageSize?: number;
+  /**
+   * 评论内容字符长度
+   * 注意，该处仅仅前端限制，请与服务端保持一致校验
+   * @default 300
+   */
+  commentCharLength?: number;
 }

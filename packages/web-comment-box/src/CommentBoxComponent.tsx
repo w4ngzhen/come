@@ -16,10 +16,11 @@ interface CommentBoxComponentProps {
 
 export const CommentBoxComponent = (props: CommentBoxComponentProps) => {
   const { options } = props;
+  const { commentListPageSize = 5, commentCharLength = 300 } = options;
   const [commentApi] = useState<ComeCommentApi>(new ComeCommentApi(options));
   const [pageInfo, setPageInfo] = useState<PageInfo>({
     page_number: 1,
-    page_size: 2,
+    page_size: commentListPageSize,
   });
 
   const [comments, setComments] = useState<Comment[]>([]);
@@ -83,9 +84,15 @@ export const CommentBoxComponent = (props: CommentBoxComponentProps) => {
       }}
     >
       <div className={styles.come_comment_box__root}>
-        <CommentEditor />
-        <div className={styles.divider} />
         {renderCommentList()}
+        <div className={styles.divider} />
+        <CommentEditor
+          contentMaxLength={commentCharLength}
+          onCommentSendClick={(commentInfo) => {
+            // todo
+            alert(JSON.stringify(commentInfo));
+          }}
+        />
       </div>
     </OptionsContext.Provider>
   );

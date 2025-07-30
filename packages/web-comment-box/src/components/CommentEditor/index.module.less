@@ -4,15 +4,40 @@
 
 .come_comment_box__comment_editor {
 
-  .info {
+  margin-bottom: 32px;
 
+  .info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+
+    label {
+      color: #434343;
+      font-size: 14px;
+
+      &:not(:first-child) {
+        margin-left: 16px;
+      }
+    }
+
+    input {
+      width: 200px;
+      margin-left: 4px;
+      border: none;
+      outline: none;
+      border-bottom: 1px solid #434343;
+
+      &:hover {
+        border-bottom: 1px solid #262626;
+      }
+    }
   }
 
   .input_area {
     display: flex;
-    padding: 8px;
+    padding: 12px 16px;
     .border(#A1A1A1);
-    border-radius: 16px;
+    border-radius: 4px;
     transition: 0.2s linear;
 
     &.focused {
@@ -27,7 +52,6 @@
       all: unset;
       width: 100%;
       height: 80px;
-      margin: 8px 12px;
       resize: none;
       color: #333;
 
@@ -41,42 +65,43 @@
       }
     }
 
-    .actions {
-      margin-left: 8px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      align-items: center;
+  }
 
-      .send_btn {
-        all: unset;
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: #333;
-        color: #F1F1F1;
-        transition: 0.2s linear;
+  .actions {
+    margin-left: 8px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 8px;
+
+    .send_btn {
+      all: unset;
+      width: 80px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #333;
+      color: #F1F1F1;
+      transition: 0.3s linear;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &.disabled {
+        background: #999;
 
         &:hover {
-          cursor: pointer;
+          cursor: not-allowed;
         }
+      }
 
-        &.disabled {
-          background: #999;
-
-          &:hover {
-            cursor: not-allowed;
-          }
-        }
-
-        svg {
-          height: 20px;
-          width: 20px;
-          color: #F1F1F1;
-        }
+      svg {
+        height: 16px;
+        width: 16px;
+        color: #F1F1F1;
       }
     }
   }

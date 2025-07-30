@@ -16,7 +16,7 @@ import { asc, count, desc, inArray, like } from "drizzle-orm";
  * content: string
  * status: "1, 2, 3" 或 "1"
  * sort_field: "asc" | "desc"
- * sort_order: 目前仅支持"submit_time"
+ * sort_order: 目前仅支持"submit_at"
  */
 export async function getComments(c: Context) {
   try {
@@ -46,7 +46,7 @@ export async function getComments(c: Context) {
       if (sort_field) {
         // 目前只支持提交时间排序
         const field = {
-          submit_time: tb_comments.submit_time,
+          submit_at: tb_comments.submit_at,
         }[sort_field];
 
         if (field) {

@@ -20,9 +20,9 @@ export interface Comment {
   page_key: string;
   /**
    * email id after algorithm digest
-   * 邮箱ID（经过算法摘要存储）
+   * 用户ID（经过算法摘要存储）
    */
-  user_email_id: string;
+  user_id: string;
   /**
    * The nickname of the person who left the comment
    * 评论者昵称
@@ -45,7 +45,7 @@ export interface Comment {
    * UTC second timestamp
    * 评论提交时间（使用UTC 秒时间戳）
    */
-  submit_time: number;
+  submit_at: number;
   /**
    * comment status
    * 评论状态
@@ -55,11 +55,4 @@ export interface Comment {
    * 3: deleted, 已删除
    */
   status: number;
-  /**
-   * if this comment is reply for another one comment,
-   * this field will record the context.
-   * 如果此评论是对另一条评论的回复，
-   * 则此字段将记录上下文评论的ID。
-   */
-  related_comment_uid?: number;
 }
