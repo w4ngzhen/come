@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate, RouteObject } from "react-router-dom";
 import { AppLayout } from "../layout";
 import { CommentsManagement } from "../pages/comments-management";
-import { TokenManagement } from "../pages/token-management";
+import { SettingsManagement } from "../pages/settings-management";
 
 export const ROUTES: RouteObject[] = [
   {
@@ -14,8 +14,8 @@ export const ROUTES: RouteObject[] = [
         element: <CommentsManagement />,
       },
       {
-        path: "token-management",
-        element: <TokenManagement />,
+        path: "settings-management",
+        element: <SettingsManagement />,
       },
     ],
   },

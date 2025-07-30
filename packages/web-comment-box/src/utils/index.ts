@@ -1,1 +1,2 @@
-export { cls, baseClassSupplier } from "./classname-utils";
+export { cls } from "./classname-utils";
+export { logger } from "./log";

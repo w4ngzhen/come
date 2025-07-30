@@ -45,6 +45,9 @@ importers:
 
   packages/web-comment-box:
     dependencies:
+      dayjs:
+        specifier: ^1.11.13
+        version: 1.11.13
       preact:
         specifier: ^10.27.0
         version: 10.27.0

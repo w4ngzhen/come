@@ -1,14 +1,12 @@
 import { CSSProperties } from "preact/compat";
-import "./index.less";
 import { IconLoading } from "../icons";
-import { baseClassSupplier, cls } from "../../../utils";
-
-const baseCls = baseClassSupplier("spin");
+import { cls } from "../../../utils";
+import * as styles from "./index.module.less";
 
 export function Spin(props: { className?: string; style?: CSSProperties }) {
   return (
     <div
-      className={cls(baseCls(), props.className)}
+      className={cls(styles.come_comment_box__spin, props.className)}
       style={{
         ...(props.style || {}),
       }}

@@ -1,24 +1,37 @@
 import { useLocalStorageState } from "ahooks";
 import { useMemo } from "react";
 import { desensitizeString } from "../utils";
+import { SiteService } from "../service/base";
 
-export const useLocalAuthToken = () => {
-  const [authToken, setAuthToken] = useLocalStorageState<string>(
-    "COME_ADMIN_AUTH_TOKEN",
-    {
-      defaultValue: "",
-      serializer: (value) => value,
-      deserializer: (value) => value,
-    },
+export interface SiteSettings {
+  adminAuthToken?: string;
+  serviceUrl?: string;
+}
+
+export const useSettings = () => {
+  const [settings, setSettings] = useLocalStorageState<SiteSettings>(
+    "COME_ADMIN_SETTINGS",
   );
 
+  console.debug("settings", settings);
+
   const desensitizeAuthToken = useMemo(() => {
-    return desensitizeString(authToken);
-  }, [authToken]);
+    return desensitizeString(settings?.adminAuthToken);
+  }, [settings?.adminAuthToken]);
 
   return {
-    authToken,
+    settings,
+    setSettings,
     desensitizeAuthToken,
-    setAuthToken,
   };
+};
+
+export const useSiteService = (): SiteService | null => {
+  const { settings } = useSettings();
+  return useMemo(() => {
+    if (settings?.serviceUrl && settings?.adminAuthToken) {
+      return new SiteService(settings.serviceUrl, settings.adminAuthToken);
+    }
+    return null;
+  }, [settings]);
 };

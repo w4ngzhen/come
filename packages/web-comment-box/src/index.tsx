@@ -1,31 +1,35 @@
 import { render } from "preact";
 import { ConfigOptions } from "./interface";
 import { CommentBoxComponent } from "./CommentBoxComponent";
+import { logger } from "./utils";
 
 export function init(mountEle: string, opts: ConfigOptions) {
-  if (!opts) {
-    console.error("CommentBox初始化失败：初始化参数对象为空");
+  if (!validateOptions(opts)) {
     return;
   }
-  const validateNonEmpty = (keys: Array<keyof ConfigOptions>): boolean => {
-    if (!keys?.length) {
-      return false;
-    }
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i];
-      if (!opts[key]) {
-        console.error(`CommentBox初始化失败：初始化参数 ${key} 为空`);
-        return false;
-      }
-    }
-    return true;
-  };
-  // if (!validateNonEmpty([])) {
-  //   return;
-  // }
-  console.debug("Prepare mount CommentBox instant");
+  logger.info("Prepare mount CommentBox instant");
   render(
     <CommentBoxComponent options={opts} />,
-    document.querySelector(mountEle || "#comment-box"),
+    document.querySelector(mountEle || "#come-comment-box"),
   );
+}
+
+function validateOptions(options: ConfigOptions) {
+  if (!options) {
+    logger.error("ComeCommentBox初始化失败：初始化参数对象为空");
+    return false;
+  }
+  if (!options.serviceUrl) {
+    logger.error("ComeCommentBox初始化失败：初始化参数 serviceUrl 为空");
+    return false;
+  }
+  if (!options.siteKey) {
+    logger.error("ComeCommentBox初始化失败：初始化参数 siteKey 为空");
+    return false;
+  }
+  if (!options.pageKey) {
+    logger.error("ComeCommentBox初始化失败：初始化参数 pageKey 为空");
+    return false;
+  }
+  return true;
 }

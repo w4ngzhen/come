@@ -1,13 +1,15 @@
-import "./index.less";
 import { CSSProperties } from "preact/compat";
-import { baseClassSupplier, cls } from "../../../../utils";
+import * as styles from "./index.module.less";
+import { cls } from "../../../../utils";
 
-const baseCls = baseClassSupplier("icon-loading");
 export const IconLoading = (props: {
   className?: string;
   style?: CSSProperties;
 }) => {
   return (
-    <div className={cls(baseCls(), props.className)} style={props.style} />
+    <div
+      className={cls(styles.comeCommentBox__icon_loading, props.className)}
+      style={props.style}
+    />
   );
 };

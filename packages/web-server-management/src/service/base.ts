@@ -2,23 +2,19 @@ import axios, { AxiosInstance } from "axios";
 import { PageInfo, PageResult, Result, Comment, SortInfo } from "@come/common";
 import { message } from "antd";
 
-const BASE_URL = "http://test.local:8787/management-api";
-
 export class BaseService {
   protected axiosInstance: AxiosInstance;
 
-  constructor() {
+  constructor(serviceUrl: string, adminAuthToken: string) {
     const instance = axios.create({
-      baseURL: BASE_URL,
+      baseURL: serviceUrl,
     });
 
     instance.interceptors.request.use((config) => {
-      // set admin auth token from localStorage
-      const token = localStorage.getItem("COME_ADMIN_AUTH_TOKEN");
-      if (!token) {
+      if (!adminAuthToken) {
         throw new Error("admin auth token is missing");
       }
-      config.headers["X-COME-ADMIN-AUTH-TOKEN"] = token;
+      config.headers["X-COME-ADMIN-AUTH-TOKEN"] = adminAuthToken;
       return config;
     });
 
@@ -38,7 +34,7 @@ export class BaseService {
           // 用户认证失败，跳转只token设置页面
           message.error("token验证失败，即将跳转token设置页面", 2).then(() => {
             localStorage.removeItem("COME_ADMIN_AUTH_TOKEN");
-            window.location.href = "/token-management";
+            window.location.href = "/settings-management";
           });
         }
 
@@ -66,7 +62,7 @@ export type QueryCommentsFilter = {
   status?: Array<number>;
 };
 
-class SiteService extends BaseService {
+export class SiteService extends BaseService {
   async queryComments(params: {
     pageInfo?: PageInfo;
     sorterInfo?: SortInfo;
@@ -83,6 +79,3 @@ class SiteService extends BaseService {
     });
   }
 }
-
-const SITE_SERVICE = new SiteService();
-export { SITE_SERVICE };

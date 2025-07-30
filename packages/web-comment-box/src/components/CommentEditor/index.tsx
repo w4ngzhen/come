@@ -1,9 +1,7 @@
-import "./index.less";
 import { useState } from "preact/compat";
-import { baseClassSupplier, cls } from "../../utils";
+import { cls } from "../../utils";
 import { IconLoading, IconSend } from "../basic";
-
-const baseCls = baseClassSupplier("editor");
+import * as styles from "./index.module.less";
 
 interface IProps {
   loading?: boolean;
@@ -20,20 +18,20 @@ export const CommentEditor = (props: IProps) => {
   const isDisabled = !inputContent;
 
   return (
-    <div className={cls(baseCls(), className)}>
-      <div className={baseCls("info")}>
+    <div className={cls(styles.come_comment_box__comment_editor, className)}>
+      <div className={styles.info}>
         <label htmlFor={"email"}>邮箱</label>
         <input id={"email"} placeholder={"Email"} />
         <label htmlFor={"nickname"}>昵称</label>
         <input id="nickname" placeholder={"Name"} />
       </div>
-      <div className={baseCls("input-area")}>
+      <div className={styles.input_area}>
         <textarea
           disabled={loading}
           className={cls(
-            baseCls("input-area-input"),
-            focused && baseCls("input-area-input-focused"),
-            loading && baseCls("input-area-input-disabled"),
+            styles.textarea,
+            focused && styles.focused,
+            loading && styles.disabled,
           )}
           value={inputContent}
           onChange={(e: Event) => {
@@ -43,12 +41,11 @@ export const CommentEditor = (props: IProps) => {
           onBlur={() => setFocused(false)}
           placeholder={"Leave some comments here"}
         />
-        <div className={baseCls("input-area-actions")}>
+        <div className={styles.actions}>
           <button
             className={cls(
-              baseCls("input-area-actions-send-btn"),
-              (loading || isDisabled) &&
-                baseCls("input-area-actions-send-btn-disabled"),
+              styles.send_btn,
+              (loading || isDisabled) && styles.disabled,
             )}
             onClick={() => {
               if (!isDisabled && confirm("Do you want send this comment?")) {

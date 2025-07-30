@@ -1,9 +1,6 @@
-import "./index.less";
-import { baseClassSupplier } from "../../../utils";
-
-const baseCls = baseClassSupplier("error-tip");
+import * as styles from "./index.module.less";
 
 export const ErrorTip = (props: { error: string }) => {
   const { error } = props;
-  return <div className={baseCls()}>{error}</div>;
+  return <div className={styles.come_comment_box__error_tip}>{error}</div>;
 };

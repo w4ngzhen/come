@@ -2,6 +2,15 @@ const path = require("node:path");
 const rspack = require("@rspack/core");
 const { defineConfig } = require("@rspack/cli");
 
+const CSS_LOADER = {
+  loader: "css-loader",
+  options: {
+    modules: {
+      localIdentName: "[local]", // 保留原始名称
+    },
+  },
+};
+
 module.exports = defineConfig({
   mode: "development",
   entry: {
@@ -39,15 +48,11 @@ module.exports = defineConfig({
       },
       {
         test: /\.css$/,
-        use: [rspack.CssExtractRspackPlugin.loader, "css-loader"],
+        use: [rspack.CssExtractRspackPlugin.loader, CSS_LOADER],
       },
       {
         test: /\.less$/,
-        use: [
-          rspack.CssExtractRspackPlugin.loader,
-          "css-loader",
-          "less-loader",
-        ],
+        use: [rspack.CssExtractRspackPlugin.loader, CSS_LOADER, "less-loader"],
       },
     ],
   },

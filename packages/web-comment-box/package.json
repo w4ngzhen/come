@@ -12,6 +12,7 @@
   "license": "MIT",
   "packageManager": "pnpm@10.11.0",
   "dependencies": {
+    "dayjs": "^1.11.13",
     "preact": "^10.27.0"
   },
   "devDependencies": {

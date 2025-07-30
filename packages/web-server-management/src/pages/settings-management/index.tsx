@@ -1,31 +1,27 @@
 import React from "react";
 import * as styles from "./index.module.less";
 import { Button, Form, FormProps, Input } from "antd";
-import { useNavigate } from "react-router-dom";
-import { useLocalAuthToken } from "../../hooks";
+import { useSettings } from "../../hooks";
 import { PageContentWrapper } from "../../components/page-content-wrapper";
 
 type FieldType = {
   token?: string;
+  serviceUrl?: string;
 };
 
-export const TokenManagement = () => {
-  const navigate = useNavigate();
-
-  const { desensitizeAuthToken, setAuthToken } = useLocalAuthToken();
+export const SettingsManagement = () => {
+  const { setSettings, settings, desensitizeAuthToken } = useSettings();
 
   const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-    const { token } = values;
-    setAuthToken(token);
-    navigate("/site-pages");
+    const { token, serviceUrl } = values;
+    setSettings({ ...settings, serviceUrl, adminAuthToken: token });
   };
 
   return (
     <PageContentWrapper title={"Token设置"}>
-      <div className={styles.token_management}>
-        <div className={styles.token}>
-          当前 TOKEN: {desensitizeAuthToken || "无"}
-        </div>
+      <div className={styles.settings_management}>
+        <p>当前 TOKEN: {desensitizeAuthToken || "无"}</p>
+        <p>当前 service URL: {settings?.serviceUrl || "无"}</p>
         <div className={styles.form}>
           <Form
             name="basic"
@@ -47,10 +43,22 @@ export const TokenManagement = () => {
             >
               <Input width={"100%"} />
             </Form.Item>
+            <Form.Item<FieldType>
+              label="serviceUrl"
+              name="serviceUrl"
+              rules={[
+                {
+                  required: true,
+                  message: "请填写 serviceUrl",
+                },
+              ]}
+            >
+              <Input width={"100%"} />
+            </Form.Item>
 
             <Form.Item label={null}>
               <Button type="primary" htmlType="submit">
-                设置TOKEN
+                设置
               </Button>
             </Form.Item>
           </Form>

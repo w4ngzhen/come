@@ -1,17 +1,59 @@
 import { errRes, okRes } from "../../utils/resp";
 import { extractGetReqOffsetAndLimit } from "../../utils/req";
 import { Context } from "hono";
-import { ReqCreateComment } from "@come/common";
+import { Comment, PageResult, ReqCreateComment } from "@come/common";
 import { z } from "zod";
 import { md5 } from "hono/utils/crypto";
 import { validateByZod } from "../../utils/validate";
 import { drizzleDbWrapper } from "../../db";
 import { tb_comments } from "../../db/schema";
 import { nowUtcSeconds } from "../../utils/date";
+import { and, count, desc, eq } from "drizzle-orm";
 
+/**
+ * 评论组件客户端查询评论
+ * 始终以时间降序查询
+ * @param c
+ */
 export async function queryComments(c: Context) {
-  const { offset, limit } = extractGetReqOffsetAndLimit(c);
-  return c.json(okRes([]));
+  try {
+    const { offset, limit } = extractGetReqOffsetAndLimit(c);
+    const { site_key, page_key } = c.req.query();
+    const db = drizzleDbWrapper(c);
+    const baseQuery = db
+      .select()
+      .from(tb_comments)
+      .where(
+        and(
+          eq(tb_comments.site_key, site_key),
+          eq(tb_comments.page_key, page_key),
+          eq(tb_comments.status, 1), // 只查询已通过的评论
+        ),
+      )
+      .orderBy(desc(tb_comments.submit_time)); // 时间始终降序，显示最新
+
+    // 查询该条件下的分页数据
+    const dataQuery = baseQuery.limit(limit).offset(offset);
+    const result = await dataQuery.run();
+    const comments = result.results as Comment[];
+    // 查询该条件下的总数
+    const countResult = await db
+      .select({ total: count() })
+      .from(baseQuery.as("sub_query"))
+      .run();
+    const total = countResult?.[0]?.total || 0;
+
+    const pageResult: PageResult<Comment> = {
+      total,
+      items: comments,
+    };
+    return c.json(okRes(pageResult));
+  } catch (error) {
+    // 处理 error 类型未知的问题
+    const errorMessage =
+      error instanceof Error ? error.message : "An unknown error occurred";
+    return c.json({ success: false, error: errorMessage }, 500);
+  }
 }
 
 export async function createComment(c: Context) {

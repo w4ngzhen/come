@@ -10,8 +10,8 @@ const MENU_ITEMS: MenuItem[] = [
     label: "评论管理",
   },
   {
-    key: "token-management",
-    label: "Token管理",
+    key: "settings-management",
+    label: "配置",
   },
 ];
 

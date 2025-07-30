@@ -1,9 +1,11 @@
-import "./index.less";
-import { useMemo } from "preact/compat";
-import { baseClassSupplier, cls } from "../../utils";
+import { useEffect, useState } from "preact/compat";
+import { cls } from "../../utils";
 import { Comment } from "@come/common";
+import * as styles from "./index.module.less";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 
-const baseClass = baseClassSupplier("comment-item");
+dayjs.extend(relativeTime);
 
 interface IProps {
   commentData: Comment;
@@ -21,39 +23,46 @@ export const CommentItem = (props: IProps) => {
     content: commentContent,
   } = commentData;
 
-  const time = useMemo(() => {
-    return `${submit_time}`;
-  }, [submit_time]);
+  const { displayTime } = useDynamicDisplayTime(submit_time * 1000);
 
   return (
-    <div className={cls(baseClass(), className)}>
-      <div className={baseClass("avatar")}></div>
-      <div className={baseClass("panel")}>
-        <div className={baseClass("panel-header")}>
-          <span className={baseClass("panel-header-name")}>
-            {user_nickname}
-            <span>{`(${user_email})`}</span>
-          </span>
-          <span className={baseClass("panel-header-datetime")}>{time}</span>
-        </div>
-        <div className={baseClass("panel-content")}>
-          <CommentContent rawCommentContent={commentContent} />
-        </div>
+    <div className={cls(styles.come_comment_box__comment_item, className)}>
+      <div className={styles.header}>
+        <span className={styles.user_nickname}>
+          {user_nickname}
+          <span>{`(${user_email})`}</span>
+        </span>
+        <span className={styles.time}>{displayTime}</span>
+      </div>
+      <div
+        className={styles.content}
+        style={{
+          whiteSpace: "pre-wrap", // 避免丢失换行（\n）
+        }}
+      >
+        {commentContent}
       </div>
     </div>
   );
 };
 
-function CommentContent(props: { rawCommentContent?: string }) {
-  const { rawCommentContent } = props;
-  return (
-    <div
-      className={baseClass("panel-content-pure-text")}
-      style={{
-        whiteSpace: "pre-wrap", // 避免丢失换行（\n）
-      }}
-    >
-      {rawCommentContent}
-    </div>
-  );
+/**
+ * 支持动态刷新的时间显示
+ * @param baseTime UTC millisecond
+ * @param interval
+ */
+function useDynamicDisplayTime(baseTime: number, interval: number = 5) {
+  const [displayTime, setDisplayTime] = useState<string>("");
+
+  useEffect(() => {
+    const timeStr = dayjs(baseTime).fromNow();
+    setDisplayTime(timeStr);
+    const id = setInterval(() => {
+      const timeStr = dayjs(baseTime).fromNow();
+      setDisplayTime(timeStr);
+    }, interval);
+    return () => clearInterval(id);
+  }, [baseTime, interval]);
+
+  return { displayTime };
 }

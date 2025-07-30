@@ -1,15 +1,13 @@
-import { useState } from "preact/compat";
-import { baseClassSupplier } from "./utils";
+import { useEffect, useState } from "preact/compat";
 import { ConfigOptions } from "./interface";
-import { Comment } from "@come/common";
+import { Comment, PageInfo } from "@come/common";
 import { OptionsContext } from "./context";
-import { ErrorTip, IconArrow, Spin } from "./components/basic";
+import { ErrorTip, Spin } from "./components/basic";
 import { CommentList } from "./components/CommentList";
 
-import "./CommentBoxComponent.less";
+import * as styles from "./CommentBoxComponent.module.less";
 import { CommentEditor } from "./components/CommentEditor";
-
-const baseCls = baseClassSupplier("root");
+import { ComeCommentApi } from "./api";
 
 interface CommentBoxComponentProps {
   options: ConfigOptions;
@@ -17,31 +15,37 @@ interface CommentBoxComponentProps {
 
 export const CommentBoxComponent = (props: CommentBoxComponentProps) => {
   const { options } = props;
-  const { ...restOpts } = options;
-
-  // comments
-  const [loadCommentsResult, setCommentsLoadingResult] = useState<{
-    loading: boolean;
-    error?: string;
-    comments?: Comment[];
-  }>({
-    loading: false,
+  const [commentApi] = useState<ComeCommentApi>(new ComeCommentApi(options));
+  const [pageInfo, setPageInfo] = useState<PageInfo>({
+    page_number: 1,
+    page_size: 5,
   });
 
-  const loadComments = async () => {
-    return {};
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [total, setTotal] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+
+  useEffect(() => {
+    loadComments(pageInfo);
+  }, []);
+
+  const loadComments = async (pageInfo: PageInfo) => {
+    setLoading(true);
+    const result = await commentApi.getComments({
+      pageInfo: {
+        ...pageInfo,
+      },
+    });
+    if (result.success) {
+      setComments(result.data?.items || []);
+      setTotal(result.data?.total || 0);
+    } else {
+      setError(result.err_msg || "评论加载出错");
+    }
+    setLoading(false);
   };
-
-  if (loadCommentsResult.loading) {
-    return <Spin />;
-  }
-
-  if (!loadCommentsResult.loading && loadCommentsResult.error) {
-    return <ErrorTip error={loadCommentsResult.error} />;
-  }
-
   const renderCommentList = () => {
-    const { loading, error, comments = [] } = loadCommentsResult;
     if (loading) {
       return <Spin />;
     }
@@ -49,7 +53,7 @@ export const CommentBoxComponent = (props: CommentBoxComponentProps) => {
       return <ErrorTip error={error} />;
     }
     if (comments.length === 0) {
-      return <div className={baseCls("no-comment")}>暂无评论</div>;
+      return <div className={styles.no_comment}>暂无评论</div>;
     }
     return <CommentList comments={comments} />;
   };
@@ -57,14 +61,13 @@ export const CommentBoxComponent = (props: CommentBoxComponentProps) => {
   return (
     <OptionsContext.Provider
       value={{
-        ...restOpts,
+        ...options,
       }}
     >
-      <div className={baseCls()}>
-        <div className={baseCls("input-wrapper")}>
-          <CommentEditor />
-        </div>
-        <div className={baseCls("list-wrapper")}>{renderCommentList()}</div>
+      <div className={styles.come_comment_box__root}>
+        <CommentEditor />
+        <div className={styles.divider} />
+        {renderCommentList()}
       </div>
     </OptionsContext.Provider>
   );

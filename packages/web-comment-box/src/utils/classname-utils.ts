@@ -1,15 +1,3 @@
-export const getClassname = (className: string) => {
-  return `come-comment-box_${className}`;
-};
-
-export const baseClassSupplier = (moduleClass: string) => {
-  return (clsName?: string) => {
-    return !clsName
-      ? getClassname(moduleClass)
-      : getClassname(`${moduleClass}-` + clsName);
-  };
-};
-
 /**
  * classnames简单实现
  * https://www.npmjs.com/package/classnames

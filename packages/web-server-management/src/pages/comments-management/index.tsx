@@ -9,18 +9,20 @@ import {
   TableColumnsType,
   TableProps,
 } from "antd";
-import { QueryCommentsFilter, SITE_SERVICE } from "../../service/base";
+import { QueryCommentsFilter } from "../../service/base";
 import { PageContentWrapper } from "../../components/page-content-wrapper";
 import { Comment, SortInfo, PageInfo } from "@come/common";
 // 新增：导入时间格式化工具和状态映射
 import { formatUnixTime } from "../../utils/date";
 import { COMMENT_STATUS_MAP } from "../../constants/comment";
 import { SorterResult } from "antd/es/table/interface";
+import { useSiteService } from "../../hooks";
 
 export const CommentsManagement: React.FC = () => {
   const [dataSource, setDataSource] = useState<Comment[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
+  const siteService = useSiteService();
 
   // 新增：筛选条件状态
   const [filters, setFilters] = useState<QueryCommentsFilter>({
@@ -105,7 +107,7 @@ export const CommentsManagement: React.FC = () => {
     console.debug("loadData", filters, pageInfo, sorterInfo);
     setLoading(true);
     try {
-      const result = await SITE_SERVICE.queryComments({
+      const result = await siteService?.queryComments({
         pageInfo,
         sorterInfo,
         filters,

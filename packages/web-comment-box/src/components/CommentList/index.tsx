@@ -1,24 +1,23 @@
-import "./index.less";
-import { baseClassSupplier } from "../../utils";
+import { cls } from "../../utils";
 import { Comment } from "@come/common";
 import { CommentItem } from "../CommentItem";
-
-const baseClass = baseClassSupplier("comment-list");
+import * as styles from "./index.module.less";
 
 interface ICommentListProps {
   comments: Comment[];
+  className?: string;
 }
 
 export const CommentList = (props: ICommentListProps) => {
-  const { comments = [] } = props;
+  const { comments = [], className } = props;
   return (
-    <div className={baseClass()}>
-      <div className={baseClass("content")}>
+    <div className={cls(styles.come_comment_box__comment_list, className)}>
+      <div className={styles.content}>
         {comments.map((comment) => {
           return (
             <CommentItem
               commentData={comment}
-              className={baseClass("content-item-wrapper")}
+              className={styles.item_wrapper}
             />
           );
         })}
