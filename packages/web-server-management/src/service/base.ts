@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { PageInfo, PageResult, Result, Comment, SortInfo } from "@come/common";
+import { PageInfo, PageResult, Result, Comment, SortInfo } from "@come/common-types";
 import { message } from "antd";
 
 export class BaseService {

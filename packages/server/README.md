@@ -1,25 +1,13 @@
-# Cloudflare Workers OpenAPI 3.1
+# @come/server
 
-This is a Cloudflare Worker with OpenAPI 3.1 using [chanfana](https://github.com/cloudflare/chanfana) and [Hono](https://github.com/honojs/hono).
+评论系统接口服务（packages/server）。基于Cloudflare Worker的node服务，使用TypeScript开发，整个服务目前只有3个依赖库：
 
-This is an example project made to be used as a quick start into building OpenAPI compliant Workers that generates the
-`openapi.json` schema automatically from code and validates the incoming request to the defined parameters or request body.
+- Hono：与Cloudflare深度集成的超轻量级 Web 框架。高性能，零依赖。
+- drizzle-orm：Cloudflare 生态中用于类型安全数据库操作的轻量级 TypeScript ORM 库，尤其与 Cloudflare D1（边缘 SQLite 数据库）深度集成
+- zod：一个高性能，轻量级的校验库。可以方便定义一些数据的字段校验规则。
 
-## Get started
+Comments System Interface Services (packages/servers). Cloudflare Worker based node service, developed using TypeScript, the entire service currently has only three dependencies:
 
-1. Sign up for [Cloudflare Workers](https://workers.dev). The free tier is more than enough for most use cases.
-2. Clone this project and install dependencies with `npm install`
-3. Run `wrangler login` to login to your Cloudflare account in wrangler
-4. Run `wrangler deploy` to publish the API to Cloudflare Workers
-
-## Project structure
-
-1. Your main router is defined in `src/index.ts`.
-2. Each endpoint has its own file in `src/endpoints/`.
-3. For more information read the [chanfana documentation](https://chanfana.pages.dev/) and [Hono documentation](https://hono.dev/docs).
-
-## Development
-
-1. Run `wrangler dev` to start a local instance of the API.
-2. Open `http://localhost:8787/` in your browser to see the Swagger interface where you can try the endpoints.
-3. Changes made in the `src/` folder will automatically trigger the server to reload, you only need to refresh the Swagger interface.
+- Hono: An ultra-lightweight Web framework deeply integrated with Cloudflare. High performance, zero dependency.
+- drizzle-orm: Lightweight TypeScript ORM library for type-safe database operations in Cloudflare ecosystem, especially deep integration with Cloudflare D1 (edge SQLite database)
+- Zod: a high-performance, lightweight validator. It is convenient to define some data field verification rules.

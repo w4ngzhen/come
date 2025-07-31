@@ -1,6 +1,6 @@
 import { useMemo } from "preact/compat";
 import { cls, formatUTCTime } from "../../utils";
-import { Comment } from "@come/common";
+import { Comment } from "@come/common-types";
 import * as styles from "./index.module.less";
 
 interface IProps {

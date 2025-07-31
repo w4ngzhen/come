@@ -1,4 +1,4 @@
-import { Result } from "@come/common";
+import { Result } from "@come/common-types";
 
 export function okRes<T = unknown>(data?: T): Result<T> {
   return {

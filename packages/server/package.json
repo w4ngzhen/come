@@ -10,7 +10,7 @@
     "db:init-local": "wrangler d1 execute db_come --local --file=./db_schema/create_tables.sql"
   },
   "dependencies": {
-    "@come/common": "workspace:*",
+    "@come/common-types": "workspace:*",
     "drizzle-orm": "^0.44.3",
     "hono": "^4.6.20",
     "zod": "^4.0.10"

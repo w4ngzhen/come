@@ -11,7 +11,7 @@ import {
 } from "antd";
 import { QueryCommentsFilter } from "../../service/base";
 import { PageContentWrapper } from "../../components/page-content-wrapper";
-import { Comment, SortInfo, PageInfo } from "@come/common";
+import { Comment, SortInfo, PageInfo } from "@come/common-types";
 // 新增：导入时间格式化工具和状态映射
 import { formatUnixTime } from "../../utils/date";
 import { COMMENT_STATUS_MAP } from "../../constants/comment";

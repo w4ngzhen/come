@@ -4,7 +4,7 @@ import {
   PageResult,
   Result,
   ReqCreateComment,
-} from "@come/common";
+} from "@come/common-types";
 import { ConfigOptions } from "../interface";
 import { logger } from "../utils";
 

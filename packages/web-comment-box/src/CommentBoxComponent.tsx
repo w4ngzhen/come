@@ -1,6 +1,6 @@
 import { useEffect, useState } from "preact/compat";
 import { ConfigOptions } from "./interface";
-import { Comment, PageInfo } from "@come/common";
+import { Comment, PageInfo } from "@come/common-types";
 import { OptionsContext } from "./context";
 import { ErrorTip, Spin } from "./components/basic";
 import { CommentList } from "./components/CommentList";

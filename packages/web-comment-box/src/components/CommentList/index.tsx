@@ -1,5 +1,5 @@
 import { cls } from "../../utils";
-import { Comment } from "@come/common";
+import { Comment } from "@come/common-types";
 import { CommentItem } from "../CommentItem";
 import * as styles from "./index.module.less";
 

@@ -1,7 +1,7 @@
 import { errRes, okRes } from "../../utils/resp";
 import { extractGetReqOffsetAndLimit } from "../../utils/req";
 import { Context } from "hono";
-import { Comment, PageResult, ReqCreateComment } from "@come/common";
+import { Comment, PageResult, ReqCreateComment } from "@come/common-types";
 import { z } from "zod";
 import { md5 } from "hono/utils/crypto";
 import { validateByZod } from "../../utils/validate";

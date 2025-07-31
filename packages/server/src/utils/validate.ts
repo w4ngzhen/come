@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { errRes, okRes } from "./resp";
-import { Result } from "@come/common";
+import { Result } from "@come/common-types";
 
 /**
  * 使用zod校验数据

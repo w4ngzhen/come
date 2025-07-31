@@ -12,7 +12,7 @@ importers:
         specifier: ^3.6.2
         version: 3.6.2
 
-  packages/common:
+  packages/common-types:
     devDependencies:
       typescript:
         specifier: ^5.8.3
@@ -20,9 +20,9 @@ importers:
 
   packages/server:
     dependencies:
-      '@come/common':
+      '@come/common-types':
         specifier: workspace:*
-        version: link:../common
+        version: link:../common-types
       drizzle-orm:
         specifier: ^0.44.3
         version: 0.44.3(@cloudflare/workers-types@4.20250726.0)
@@ -52,9 +52,9 @@ importers:
         specifier: ^10.27.0
         version: 10.27.0
     devDependencies:
-      '@come/common':
+      '@come/common-types':
         specifier: workspace:*
-        version: link:../common
+        version: link:../common-types
       '@rspack/cli':
         specifier: ^1.4.10
         version: 1.4.10(@rspack/core@1.4.10(@swc/helpers@0.5.17))(@types/express@4.17.23)
@@ -73,15 +73,18 @@ importers:
       less-loader:
         specifier: ^12.3.0
         version: 12.3.0(@rspack/core@1.4.10(@swc/helpers@0.5.17))(less@4.4.0)
+      typescript:
+        specifier: ^5.8.3
+        version: 5.8.3
 
   packages/web-server-management:
     dependencies:
       '@ant-design/icons':
         specifier: ~5.6.1
         version: 5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@come/common':
+      '@come/common-types':
         specifier: workspace:*
-        version: link:../common
+        version: link:../common-types
       '@swc/helpers':
         specifier: ^0.5.17
         version: 0.5.17

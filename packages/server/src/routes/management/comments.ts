@@ -1,6 +1,6 @@
 import type { Context } from "hono";
 import { extractGetReqOffsetAndLimit } from "../../utils/req";
-import { Comment, PageResult } from "@come/common";
+import { Comment, PageResult } from "@come/common-types";
 import { okRes } from "../../utils/resp";
 import { drizzleDbWrapper } from "../../db";
 import { tb_comments } from "../../db/schema";
