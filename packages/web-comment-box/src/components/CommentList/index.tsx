@@ -5,11 +5,12 @@ import * as styles from "./index.module.less";
 
 interface ICommentListProps {
   comments: Comment[];
+  commentTimeZone?: string;
   className?: string;
 }
 
 export const CommentList = (props: ICommentListProps) => {
-  const { comments = [], className } = props;
+  const { comments = [], className, commentTimeZone } = props;
   return (
     <div className={cls(styles.come_comment_box__comment_list, className)}>
       <div className={styles.content}>
@@ -18,6 +19,7 @@ export const CommentList = (props: ICommentListProps) => {
             <CommentItem
               key={comment.uid}
               commentData={comment}
+              commentTimeZone={commentTimeZone}
               className={styles.item_wrapper}
             />
           );

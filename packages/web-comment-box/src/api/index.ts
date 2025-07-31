@@ -1,5 +1,12 @@
-import type { PageInfo, Comment, PageResult, Result } from "@come/common";
+import {
+  PageInfo,
+  Comment,
+  PageResult,
+  Result,
+  ReqCreateComment,
+} from "@come/common";
 import { ConfigOptions } from "../interface";
+import { logger } from "../utils";
 
 export class ComeCommentApi {
   /**
@@ -31,35 +38,67 @@ export class ComeCommentApi {
   public async getComments(requestParams: {
     pageInfo: PageInfo;
   }): Promise<Result<PageResult<Comment>>> {
-    const { pageInfo } = requestParams;
-    const query = new URLSearchParams({
-      site_key: this.siteKey,
-      page_key: this.pageKey,
-      page_number: pageInfo.page_number.toString(),
-      page_size: pageInfo.page_size.toString(),
+    return handleRawResp("加载评论", () => {
+      const { pageInfo } = requestParams;
+      const query = new URLSearchParams({
+        site_key: this.siteKey,
+        page_key: this.pageKey,
+        page_number: pageInfo.page_number.toString(),
+        page_size: pageInfo.page_size.toString(),
+      });
+      return fetch(`${this.serviceUrl}/comments?${query.toString()}`, {
+        method: "GET",
+      });
     });
+  }
 
-    try {
-      const rawResp = await fetch(
-        `${this.serviceUrl}/comments?${query.toString()}`,
-        {
-          method: "GET",
-        },
-      );
+  public async submitComment(
+    reqCreateComment: Omit<ReqCreateComment, "site_key" | "page_key">,
+  ): Promise<Result> {
+    return handleRawResp("创建评论", () => {
+      const req = {
+        ...reqCreateComment,
+        site_key: this.siteKey,
+        page_key: this.pageKey,
+      };
+      return fetch(`${this.serviceUrl}/comment`, {
+        method: "POST",
+        body: JSON.stringify(req),
+      });
+    });
+  }
+}
 
-      if (!rawResp.ok) {
-        return {
-          success: false,
-          err_msg: `加载评论失败：${rawResp.statusText}`,
-        };
+/**
+ * @param subject
+ * @param reqFunc
+ */
+async function handleRawResp<T>(
+  subject: string,
+  reqFunc: () => Promise<Response>,
+): Promise<Result<T>> {
+  try {
+    const rawResp = await reqFunc();
+    if (!rawResp.ok) {
+      let errMsg: string;
+      const errorBody = await rawResp.json();
+      if ("success" in errorBody && !errorBody.success) {
+        // 服务端非2xx，响应的Result
+        errMsg = (errorBody as Result).err_msg || rawResp.statusText;
+      } else {
+        errMsg = rawResp.statusText;
       }
-
-      return await rawResp.json();
-    } catch (e) {
       return {
         success: false,
-        err_msg: `加载评论失败：${e.message}`,
+        err_msg: `${subject || "接口调用"}出错: ${errMsg}`,
       };
     }
+    return (await rawResp.json()) as Result<T>;
+  } catch (e) {
+    logger.error(e);
+    return {
+      success: false,
+      err_msg: `${subject || "接口调用"}出错: ${e.message}`,
+    };
   }
 }

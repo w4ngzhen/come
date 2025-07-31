@@ -27,4 +27,9 @@ export interface ConfigOptions {
    * @default 300
    */
   commentCharLength?: number;
+  /**
+   * 评论时间时区
+   * @default 根据当前浏览器运行时区
+   */
+  commentTimeZone?: string;
 }

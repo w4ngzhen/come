@@ -6,7 +6,7 @@ import { ErrorTip, Spin } from "./components/basic";
 import { CommentList } from "./components/CommentList";
 
 import * as styles from "./CommentBoxComponent.module.less";
-import { CommentEditor } from "./components/CommentEditor";
+import { CommentEditor, InputCommentInfo } from "./components/CommentEditor";
 import { ComeCommentApi } from "./api";
 import { SimplePager } from "./components/SimplePager";
 
@@ -47,6 +47,26 @@ export const CommentBoxComponent = (props: CommentBoxComponentProps) => {
     }
     setLoading(false);
   };
+
+  const submitComment = async (comment: InputCommentInfo) => {
+    setLoading(true);
+    const result = await commentApi.submitComment({
+      content: comment.content,
+      user_email: comment.userEmail,
+      user_nickname: comment.userNickname,
+    });
+    if (!result.success) {
+      alert(result.err_msg);
+      setLoading(false);
+      return;
+    }
+    // 重置分页，请求
+    const page = { page_number: 1, page_size: pageInfo.page_size };
+    setPageInfo(page);
+    await loadComments(page);
+    setLoading(false);
+  };
+
   const renderCommentList = () => {
     if (loading) {
       return <Spin />;
@@ -87,11 +107,9 @@ export const CommentBoxComponent = (props: CommentBoxComponentProps) => {
         {renderCommentList()}
         <div className={styles.divider} />
         <CommentEditor
+          loading={loading}
           contentMaxLength={commentCharLength}
-          onCommentSendClick={(commentInfo) => {
-            // todo
-            alert(JSON.stringify(commentInfo));
-          }}
+          onCommentSendClick={submitComment}
         />
       </div>
     </OptionsContext.Provider>

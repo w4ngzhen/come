@@ -24,8 +24,4 @@ export interface ReqCreateComment {
    * 评论内容
    */
   content: string;
-  /**
-   * 关联的评论ID
-   */
-  related_comment_uid?: number;
 }

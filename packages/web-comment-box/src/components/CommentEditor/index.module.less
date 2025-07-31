@@ -5,48 +5,53 @@
 .come_comment_box__comment_editor {
 
   margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 16px;
+  .border(#A1A1A1);
+  border-radius: 4px;
+  transition: 0.2s linear;
+
+  &.focused {
+    .border(#333);
+  }
+
+  &:hover {
+    .border(#333);
+  }
 
   .info {
     display: flex;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 16px;
 
-    label {
-      color: #434343;
-      font-size: 14px;
+    .input_item {
+      display: flex;
+      align-items: center;
 
-      &:not(:first-child) {
-        margin-left: 16px;
+      label {
+        color: #434343;
+        font-size: 14px;
       }
-    }
 
-    input {
-      width: 200px;
-      margin-left: 4px;
-      border: none;
-      outline: none;
-      border-bottom: 1px solid #434343;
+      input {
+        width: 200px;
+        margin-left: 4px;
+        border: none;
+        outline: none;
+        border-bottom: 1px solid #434343;
 
-      &:hover {
-        border-bottom: 1px solid #262626;
+        &:hover {
+          border-bottom: 1px solid #262626;
+        }
       }
     }
   }
 
   .input_area {
     display: flex;
-    padding: 12px 16px;
-    .border(#A1A1A1);
-    border-radius: 4px;
-    transition: 0.2s linear;
-
-    &.focused {
-      .border(#333);
-    }
-
-    &:hover {
-      .border(#333);
-    }
 
     .textarea {
       all: unset;
@@ -65,43 +70,44 @@
       }
     }
 
-  }
 
-  .actions {
-    margin-left: 8px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-top: 8px;
-
-    .send_btn {
-      all: unset;
-      width: 80px;
-      height: 36px;
-      border-radius: 8px;
+    .actions {
+      margin-left: 8px;
       display: flex;
-      justify-content: center;
-      align-items: center;
-      background: #333;
-      color: #F1F1F1;
-      transition: 0.3s linear;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+      margin-top: 8px;
 
-      &:hover {
-        cursor: pointer;
-      }
-
-      &.disabled {
-        background: #999;
+      .send_btn {
+        all: unset;
+        width: 64px;
+        height: 32px;
+        border-radius: 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #333;
+        color: #F1F1F1;
+        transition: 0.3s linear;
 
         &:hover {
-          cursor: not-allowed;
+          cursor: pointer;
         }
-      }
 
-      svg {
-        height: 16px;
-        width: 16px;
-        color: #F1F1F1;
+        &.disabled {
+          background: #999;
+
+          &:hover {
+            cursor: not-allowed;
+          }
+        }
+
+        svg {
+          height: 16px;
+          width: 16px;
+          color: #F1F1F1;
+        }
       }
     }
   }
