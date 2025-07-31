@@ -1,5 +1,9 @@
 # COME
 
+> [!WARNING]
+> This project is still in heavy development and testing.
+> Everything you see is very much a work-in-progress.
+
 COME，一套轻量级，可自托管的，基于Cloudflare D1的评论管理方案
 
 COME, a lightweight, self-hosted Cloudflare D1-based comment management solution
