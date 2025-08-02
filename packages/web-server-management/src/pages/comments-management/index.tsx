@@ -8,15 +8,21 @@ import {
   Col,
   TableColumnsType,
   TableProps,
+  Tag,
+  Typography,
+  Dropdown,
+  Modal,
+  Radio,
+  Button,
 } from "antd";
 import { QueryCommentsFilter } from "../../service/base";
 import { PageContentWrapper } from "../../components/page-content-wrapper";
 import { Comment, SortInfo, PageInfo } from "@come/common-types";
 // 新增：导入时间格式化工具和状态映射
 import { formatUnixTime } from "../../utils/date";
-import { COMMENT_STATUS_MAP } from "../../constants/comment";
 import { SorterResult } from "antd/es/table/interface";
 import { useSiteService } from "../../hooks";
+import { SettingOutlined } from "@ant-design/icons";
 
 export const CommentsManagement: React.FC = () => {
   const [dataSource, setDataSource] = useState<Comment[]>([]);
@@ -35,6 +41,13 @@ export const CommentsManagement: React.FC = () => {
     page_number: 1,
   });
   const [sortInfo, setSortInfo] = useState<SortInfo>({});
+
+  const [currentHandledComment, setCurrentHandledComment] =
+    useState<Comment | null>(null);
+  // 标记评论modal
+  const [showMarkStatusModal, setShowMarkStatusModal] = useState(false);
+  // 受控标记评论状态
+  const [markStatus, setMarkStatus] = useState<number>(0);
 
   // 新增：表格列配置（支持提交时间排序）
   const columns: TableColumnsType<Comment> = [
@@ -72,14 +85,33 @@ export const CommentsManagement: React.FC = () => {
       title: "评论内容",
       dataIndex: "content",
       key: "content",
-      ellipsis: true,
+      render: (content: string) => {
+        return (
+          <Typography.Paragraph
+            ellipsis={{
+              expandable: "collapsible",
+            }}
+          >
+            {content}
+          </Typography.Paragraph>
+        );
+      },
     },
     {
       title: "状态",
       dataIndex: "status",
       key: "status",
       width: 100,
-      render: (status: number) => COMMENT_STATUS_MAP[status] || "未知",
+      render: (status: number) => {
+        const statusMap = {
+          0: { color: "gold", text: "审核中" },
+          1: { color: "green", text: "已通过" },
+          2: { color: "red", text: "已拒绝" },
+          3: { color: "gray", text: "已删除" },
+        };
+        const config = statusMap[status] || { color: "default", text: "未知" };
+        return <Tag color={config.color}>{config.text}</Tag>;
+      },
     },
     {
       title: "提交时间",
@@ -89,6 +121,38 @@ export const CommentsManagement: React.FC = () => {
       render: (time: number) => formatUnixTime(time), // 格式化时间戳
       sorter: true, // 启用排序
       sortDirections: ["ascend", "descend"], // 支持正序/倒序
+    },
+    {
+      title: "设置",
+      key: "setting",
+      width: 80,
+      render: (_, row) => {
+        const items = [];
+        items.push({
+          key: "mark_status",
+          label: (
+            <span
+              onClick={() => {
+                setCurrentHandledComment(row);
+                setMarkStatus(0);
+                setShowMarkStatusModal(true);
+              }}
+            >
+              标记状态
+            </span>
+          ),
+        });
+
+        return (
+          <Dropdown
+            menu={{
+              items,
+            }}
+          >
+            <SettingOutlined style={{ cursor: "pointer" }} />
+          </Dropdown>
+        );
+      },
     },
   ];
 
@@ -195,9 +259,10 @@ export const CommentsManagement: React.FC = () => {
           />
         </Col>
       </Row>
-
       <Table<Comment>
+        size={"small"}
         rowKey="uid"
+        sticky
         columns={columns}
         dataSource={dataSource}
         loading={loading}
@@ -210,6 +275,58 @@ export const CommentsManagement: React.FC = () => {
         }}
         onChange={onTableChange}
       />
+      <Modal
+        title={"标记评论"}
+        width={600}
+        open={showMarkStatusModal}
+        footer={
+          <>
+            <Button
+              onClick={async () => {
+                if (!currentHandledComment) {
+                  return;
+                }
+                try {
+                  await siteService.markCommentStatus(
+                    currentHandledComment.uid,
+                    markStatus,
+                  );
+                  message.success("标记成功");
+                  const nextPageInfo = {
+                    ...pageInfo,
+                    page_number: 1,
+                  };
+                  setPageInfo(nextPageInfo);
+                  loadData(filters, nextPageInfo, sortInfo);
+                  setShowMarkStatusModal(false);
+                } catch (e) {
+                  message.error("标记失败");
+                }
+              }}
+            >
+              Ok
+            </Button>
+          </>
+        }
+        onCancel={() => setShowMarkStatusModal(false)}
+      >
+        <Radio.Group
+          size={"small"}
+          optionType={"button"}
+          name="radiogroup"
+          value={markStatus}
+          onChange={(e) => {
+            console.debug("e.target.value", e.target.value);
+            setMarkStatus(e.target.value);
+          }}
+          options={[
+            { value: 0, label: "审核中(under review)" },
+            { value: 1, label: "已通过(passed)" },
+            { value: 2, label: "已拒绝(rejected)" },
+            { value: 3, label: "已删除(deleted)" },
+          ]}
+        />
+      </Modal>
     </PageContentWrapper>
   );
 };

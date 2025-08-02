@@ -1,10 +1,12 @@
 import type { Context } from "hono";
 import { extractGetReqOffsetAndLimit } from "../../utils/req";
 import { Comment, PageResult } from "@come/common-types";
-import { okRes } from "../../utils/resp";
+import { errRes, okRes } from "../../utils/resp";
 import { drizzleDbWrapper } from "../../db";
 import { tb_comments } from "../../db/schema";
-import { asc, count, desc, inArray, like } from "drizzle-orm";
+import { asc, count, desc, eq, inArray, like } from "drizzle-orm";
+import { validateByZod } from "../../utils/validate";
+import { z } from "zod";
 
 /**
  * 分页查询页面记录
@@ -82,3 +84,40 @@ export async function getComments(c: Context) {
     return c.json({ success: false, error: errorMessage }, 500);
   }
 }
+
+/**
+ * 评论状态修改
+ */
+export async function markCommentStatus(c: Context) {
+  const { uid, status } = await c.req.json();
+  try {
+    const parseRes = validateByZod({ uid, status }, MarkCommentValidateScheme);
+    if (!parseRes.success) {
+      return c.json(parseRes.err_msg, 400);
+    }
+    const start = performance.now();
+    const db = drizzleDbWrapper(c);
+    const dbRes = await db
+      .update(tb_comments)
+      .set({
+        status: Number(status),
+      })
+      .where(eq(tb_comments.uid, Number(uid)))
+      .run();
+    if (dbRes.success) {
+      return c.json(okRes({ processingTime: performance.now() - start }));
+    } else {
+      return c.json(errRes("评论状态更新失败，请稍候再试"), 500);
+    }
+  } catch (e) {
+    return c.json(errRes("评论状态更新失败，请稍候再试"), 500);
+  }
+}
+
+/**
+ * 评论状态修改参数校验
+ */
+const MarkCommentValidateScheme = z.object({
+  uid: z.number().int(),
+  status: z.number().int().min(0).max(3),
+});

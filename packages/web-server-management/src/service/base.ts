@@ -1,5 +1,11 @@
 import axios, { AxiosInstance } from "axios";
-import { PageInfo, PageResult, Result, Comment, SortInfo } from "@come/common-types";
+import {
+  PageInfo,
+  PageResult,
+  Result,
+  Comment,
+  SortInfo,
+} from "@come/common-types";
 import { message } from "antd";
 
 export class BaseService {
@@ -76,6 +82,16 @@ export class SiteService extends BaseService {
         ...filters,
         status: filters?.status?.join(",") || "",
       },
+    });
+  }
+
+  async markCommentStatus(
+    uid: number,
+    status: Comment["status"],
+  ): Promise<void> {
+    return this.axiosInstance.post(`/mark-comment-status`, {
+      uid,
+      status,
     });
   }
 }

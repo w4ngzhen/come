@@ -13,7 +13,7 @@ export const AppLayout = () => {
         <Header />
       </Layout.Header>
       <Layout>
-        <Layout.Sider width="240px" className={styles.aside_style}>
+        <Layout.Sider width="120px" className={styles.aside_style}>
           <AsideMenu />
         </Layout.Sider>
         <Layout.Content className={styles.content_style}>
