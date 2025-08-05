@@ -26,7 +26,8 @@
     {
       "binding": "MY_COME_DB",
       "database_name": "db_come",
-      "database_id": "<DB_COME_DATABASE_ID>"
+      // 请修改该为你自己的数据库ID
+      "database_id": "708da218-c821-4086-9cb5-9a6bb97066c8"
     }
   ],
   /**
@@ -34,7 +35,7 @@
    * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
    */
   "vars": {
-    // 注意，"COME_ADMIN_AUTH_TOKEN" 以及 "COME_DATABASE_ID" 是一个 secret，不能直接配置在 wrangler.jsonc 中
+    // 注意，"COME_ADMIN_AUTH_TOKEN" 是一个 secret，不能直接配置在 wrangler.jsonc 中
     // 在本地开发时，只需要在“.dev.vars”中进行定义，并且该vars文件请勿push至公共代码仓库
   }
   /**
