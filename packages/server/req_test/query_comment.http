@@ -1,0 +1,3 @@
+GET http://localhost:8787/management-api/comments?page_number=1&page_size=3&content=hello&status=0
+Content-Type: application/json
+x-come-admin-auth-token: 123456 // 这是你的本地启动时".dev.vars"中定义的COME_ADMIN_AUTH_TOKEN的值

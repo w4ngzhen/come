@@ -39,6 +39,8 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const navigate = useNavigate();
   const { settings } = useSettings();
 
+  console.debug("route", location.pathname, settings);
+
   // 1. 特殊路由放行（如设置页本身，避免死循环）
   if (location.pathname === "/settings-management") {
     return <>{children}</>;

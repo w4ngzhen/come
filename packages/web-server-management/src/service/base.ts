@@ -8,13 +8,31 @@ import {
 } from "@come/common-types";
 import { message } from "antd";
 
+export interface ServiceUrlMap {
+  /**
+   * 管理端查询评论 API URL
+   */
+  queryCommentUrl: string;
+  /**
+   * 管理段标记评论状态 API URL
+   */
+  markCommentStatusUrl: string;
+}
+
+export function createServiceUrlMap(serviceUrl: string): ServiceUrlMap {
+  return {
+    queryCommentUrl: `${serviceUrl}/comments`,
+    markCommentStatusUrl: `${serviceUrl}/mark-comment-status`,
+  };
+}
+
 export class BaseService {
   protected axiosInstance: AxiosInstance;
+  protected serviceUrlMap: ServiceUrlMap;
 
   constructor(serviceUrl: string, adminAuthToken: string) {
-    const instance = axios.create({
-      baseURL: serviceUrl,
-    });
+    const instance = axios.create();
+    this.serviceUrlMap = createServiceUrlMap(serviceUrl);
 
     instance.interceptors.request.use((config) => {
       if (!adminAuthToken) {
@@ -75,7 +93,7 @@ export class SiteService extends BaseService {
     filters?: QueryCommentsFilter;
   }): Promise<PageResult<Comment>> {
     const { pageInfo, sorterInfo, filters } = params;
-    return this.axiosInstance.get("/comments", {
+    return this.axiosInstance.get(this.serviceUrlMap.queryCommentUrl, {
       params: {
         ...pageInfo,
         ...sorterInfo,
@@ -89,7 +107,7 @@ export class SiteService extends BaseService {
     uid: number,
     status: Comment["status"],
   ): Promise<void> {
-    return this.axiosInstance.post(`/mark-comment-status`, {
+    return this.axiosInstance.post(this.serviceUrlMap.markCommentStatusUrl, {
       uid,
       status,
     });

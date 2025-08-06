@@ -1,18 +1,18 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 
+import { checkAdminToken } from "./routes/_middleware/check-token";
+import { getComments, markCommentStatus } from "./routes/management";
 import { createComment, queryComments } from "./routes/client";
+
 import { errRes } from "./utils/resp";
-import { checkAdminToken } from "./routes/management/middleware/check-token";
-import { getComments, markCommentStatus } from "./routes/management/comments";
 
 const app = new Hono();
 
 app.use(
   cors({
     origin: () => {
-      console.dir("handle cors origin");
-      return "*";
+      return "*"; // 允许所有域名访问
     },
   }),
 );
@@ -21,6 +21,7 @@ app.get("/", (c) => c.text("hello, come!"));
 
 /**
  * management API
+ * 管理端专属接口，使用checkAdminToken中间件进行接口token校验
  */
 // check header token for all
 app.use("/management-api/*", checkAdminToken);

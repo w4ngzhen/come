@@ -19,7 +19,7 @@ function validateOptions(options: ConfigOptions) {
     logger.error("ComeCommentBox初始化失败：初始化参数对象为空");
     return false;
   }
-  if (!options.serviceUrl) {
+  if (!options.serviceBaseUrl) {
     logger.error("ComeCommentBox初始化失败：初始化参数 serviceUrl 为空");
     return false;
   }

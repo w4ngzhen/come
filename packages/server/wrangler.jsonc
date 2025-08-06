@@ -36,7 +36,7 @@
    */
   "vars": {
     // 注意，"COME_ADMIN_AUTH_TOKEN" 是一个 secret，不能直接配置在 wrangler.jsonc 中
-    // 在本地开发时，只需要在“.dev.vars”中进行定义，并且该vars文件请勿push至公共代码仓库
+    // 在本地开发时，只需要在“.dev.vars”文件中进行定义，并且该.dev.vars文件请勿push至公共代码仓库
   }
   /**
    * Note: Use secrets to store sensitive data.

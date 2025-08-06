@@ -1,9 +1,9 @@
 import {
-  PageInfo,
   Comment,
+  PageInfo,
   PageResult,
-  Result,
   ReqCreateComment,
+  Result,
 } from "@come/common-types";
 import { ConfigOptions } from "../interface";
 import { logger } from "../utils";
@@ -13,7 +13,7 @@ export class ComeCommentApi {
    * 构造API实例时，需传递服务URL
    * @protected
    */
-  protected serviceUrl: string;
+  protected serviceBaseUrl: string;
   /**
    * 当前评论列表所属站点标识
    * @protected
@@ -25,9 +25,11 @@ export class ComeCommentApi {
    */
   protected pageKey: string;
 
-  constructor(init: Pick<ConfigOptions, "serviceUrl" | "siteKey" | "pageKey">) {
-    const { siteKey, pageKey, serviceUrl } = init;
-    this.serviceUrl = serviceUrl;
+  constructor(
+    init: Pick<ConfigOptions, "serviceBaseUrl" | "siteKey" | "pageKey">,
+  ) {
+    const { siteKey, pageKey, serviceBaseUrl } = init;
+    this.serviceBaseUrl = serviceBaseUrl;
     this.siteKey = siteKey;
     this.pageKey = pageKey;
   }
@@ -46,7 +48,7 @@ export class ComeCommentApi {
         page_number: pageInfo.page_number.toString(),
         page_size: pageInfo.page_size.toString(),
       });
-      return fetch(`${this.serviceUrl}/comments?${query.toString()}`, {
+      return fetch(`${this.serviceBaseUrl}/comments?${query.toString()}`, {
         method: "GET",
       });
     });
@@ -61,7 +63,7 @@ export class ComeCommentApi {
         site_key: this.siteKey,
         page_key: this.pageKey,
       };
-      return fetch(`${this.serviceUrl}/comment`, {
+      return fetch(`${this.serviceBaseUrl}/comment`, {
         method: "POST",
         body: JSON.stringify(req),
       });

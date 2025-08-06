@@ -1,4 +1,4 @@
-POST http://test.local:8787/client-api/comment
+POST http://localhost:8787/client-api/comment
 Content-Type: application/json
 
 {

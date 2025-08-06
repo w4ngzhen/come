@@ -4,8 +4,6 @@ import {
   message,
   Input,
   Select,
-  Row,
-  Col,
   TableColumnsType,
   TableProps,
   Tag,
@@ -220,45 +218,43 @@ export const CommentsManagement: React.FC = () => {
 
   return (
     <PageContentWrapper title={"评论管理"}>
-      {/* 新增：筛选区域 */}
-      <Row gutter={16} style={{ marginBottom: 16 }}>
-        <Col span={6}>
-          <Input
-            style={{ width: "100%" }}
-            placeholder="请输入用户昵称"
-            value={filters.user_nickname}
-            onChange={(e) =>
-              handleFilterChange("user_nickname", e.target.value)
-            }
-            allowClear
-          />
-        </Col>
-        <Col span={6}>
-          <Input
-            style={{ width: "100%" }}
-            placeholder="请输入评论内容"
-            value={filters.content}
-            onChange={(e) => handleFilterChange("content", e.target.value)}
-            allowClear
-          />
-        </Col>
-        <Col span={6}>
-          <Select<number[]>
-            mode="multiple"
-            style={{ width: "100%" }}
-            placeholder="请选择评论状态"
-            value={filters.status}
-            onChange={(value) => handleFilterChange("status", value)}
-            allowClear
-            options={[
-              { label: "审核中", value: "0" },
-              { label: "已通过", value: "1" },
-              { label: "已拒绝", value: "2" },
-              { label: "已删除", value: "3" },
-            ]}
-          />
-        </Col>
-      </Row>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 16,
+          marginBottom: 16,
+        }}
+      >
+        <Input
+          style={{ width: "200px" }}
+          placeholder="用户昵称关键字"
+          value={filters.user_nickname}
+          onChange={(e) => handleFilterChange("user_nickname", e.target.value)}
+          allowClear
+        />
+        <Input
+          style={{ width: "200px" }}
+          placeholder="评论内容关键词"
+          value={filters.content}
+          onChange={(e) => handleFilterChange("content", e.target.value)}
+          allowClear
+        />
+        <Select<number[]>
+          mode="multiple"
+          style={{ width: "200px" }}
+          placeholder="请选择评论状态"
+          value={filters.status}
+          onChange={(value) => handleFilterChange("status", value)}
+          allowClear
+          options={[
+            { label: "审核中", value: "0" },
+            { label: "已通过", value: "1" },
+            { label: "已拒绝", value: "2" },
+            { label: "已删除", value: "3" },
+          ]}
+        />
+      </div>
       <Table<Comment>
         size={"small"}
         rowKey="uid"
