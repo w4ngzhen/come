@@ -116,19 +116,25 @@ export async function createComment(c: Context) {
 const CreateCommentValidateSchema = z.object({
   site_key: z
     .string()
+    .nonempty("siteKey 不能为空")
     .min(1, "siteKey 不能为空")
     .max(100, "siteKey 长度不能超过100字符"),
   page_key: z
     .string()
+    .nonempty("pageKey 不能为空")
     .min(1, "pageKey 不能为空")
     .max(100, "pageKey 长度不能超过100字符"),
   user_nickname: z
     .string()
+    .trim()
+    .nonempty("用户昵称不能为空")
     .min(1, "用户昵称不能为空")
     .max(50, "昵称长度不能超过50"),
   user_email: z.email("邮箱格式不正确").max(50, "邮箱长度不能超过50字符"),
   content: z
     .string()
+    .trim()
+    .nonempty("评论内容不能为空")
     .min(1, "评论内容不能为空")
     .max(500, "评论内容不能超过500字符"),
 });
