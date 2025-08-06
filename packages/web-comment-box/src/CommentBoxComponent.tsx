@@ -59,6 +59,14 @@ export const CommentBoxComponent = (props: CommentBoxComponentProps) => {
       alert(result.err_msg);
       setLoading(false);
       return;
+    } else {
+      const { processing_time, is_comment_submit_review_enabled } =
+        result.data || {};
+      const msg = [`评论提交成功，服务端处理时间${processing_time}毫秒`];
+      if (is_comment_submit_review_enabled) {
+        msg.push("服务端开启评论审核，评论需要审核后才会显示");
+      }
+      alert(msg.join("，"));
     }
     // 重置分页，请求
     const page = { page_number: 1, page_size: pageInfo.page_size };

@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "deploy": "wrangler deploy",
-    "dev": "wrangler dev",
-    "start": "wrangler dev",
+    "dev": "wrangler dev --local",
     "cf-typegen": "wrangler types",
     "db:init-local": "wrangler d1 execute db_come --local --file=./db_schema/create_tables.sql"
   },

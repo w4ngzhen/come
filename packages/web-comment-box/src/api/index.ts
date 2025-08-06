@@ -7,6 +7,7 @@ import {
 } from "@come/common-types";
 import { ConfigOptions } from "../interface";
 import { logger } from "../utils";
+import { RespCreateComment } from "@come/common-types/src/req";
 
 export class ComeCommentApi {
   /**
@@ -56,7 +57,7 @@ export class ComeCommentApi {
 
   public async submitComment(
     reqCreateComment: Omit<ReqCreateComment, "site_key" | "page_key">,
-  ): Promise<Result> {
+  ): Promise<Result<RespCreateComment>> {
     return handleRawResp("创建评论", () => {
       const req = {
         ...reqCreateComment,

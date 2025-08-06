@@ -35,8 +35,18 @@
    * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
    */
   "vars": {
-    // 注意，"COME_ADMIN_AUTH_TOKEN" 是一个 secret，不能直接配置在 wrangler.jsonc 中
-    // 在本地开发时，只需要在“.dev.vars”文件中进行定义，并且该.dev.vars文件请勿push至公共代码仓库
+    /**
+     * 管理员认证token
+     * 注意，"COME_ADMIN_AUTH_TOKEN" 是一个 secret，不能直接配置在 wrangler.jsonc 中
+     * 在本地开发时，只需要在“.dev.vars”文件中进行定义，并且该.dev.vars文件请勿push至公共代码仓库
+     */
+    // "COME_ADMIN_AUTH_TOKEN": "xxx"
+
+    /**
+     * 评论提交后是否启用审核
+     * 为了评论区n诶容的合法性，强烈建议启用该配置，管理者自行审核
+     */
+    "COME_COMMENT_SUBMIT_REVIEW_ENABLED": "yes"
   }
   /**
    * Note: Use secrets to store sensitive data.

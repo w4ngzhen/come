@@ -9,6 +9,7 @@ import { drizzleDbWrapper } from "../../db";
 import { tb_comments } from "../../db/schema";
 import { nowUtcSeconds } from "../../utils/date";
 import { and, count, desc, eq } from "drizzle-orm";
+import { RespCreateComment } from "@come/common-types/src/req";
 
 /**
  * 评论组件客户端查询评论
@@ -83,6 +84,10 @@ export async function createComment(c: Context) {
   const userId = await md5(rawUserEmail);
   const userEmail = await maskEmail(rawUserEmail);
 
+  // 评论是否启用审核能力
+  const isCommentSubmitReview =
+    c.env.COME_COMMENT_SUBMIT_REVIEW_ENABLED === "yes";
+
   try {
     const start = performance.now();
     const db = drizzleDbWrapper(c);
@@ -95,13 +100,19 @@ export async function createComment(c: Context) {
         user_nickname: user_nickname,
         user_email: userEmail,
         content: content,
-        status: 1,
+        // 评论是否启用审核能力，启用审核情况下，评论状态初始为0（待审核）
+        status: isCommentSubmitReview ? 0 : 1,
         submit_at: nowUtcSeconds(),
       })
       .run();
 
     if (dbRes.success) {
-      return c.json(okRes({ processingTime: performance.now() - start }));
+      const processingTime = performance.now() - start;
+      const resp: RespCreateComment = {
+        processing_time: processingTime,
+        is_comment_submit_review_enabled: isCommentSubmitReview,
+      };
+      return c.json(okRes(resp));
     } else {
       return c.json(errRes("评论创建失败，请稍候再试"), 500);
     }
