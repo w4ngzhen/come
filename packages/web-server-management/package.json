@@ -7,7 +7,7 @@
   "scripts": {
     "ts:check": "tsc --noEmit",
     "dev": "rspack serve --config rspack.config.js",
-    "build": "rspack build --config rspack.config.js"
+    "build": "rspack build --config rspack.config.js --mode=production"
   },
   "keywords": [],
   "author": "",
@@ -33,6 +33,6 @@
     "lodash": "^4.17.21",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^7.7.1"
+    "react-router-dom": "7.6.3"
   }
 }
