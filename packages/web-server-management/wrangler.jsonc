@@ -1,0 +1,8 @@
+{
+  "name": "come-server-management",
+  "compatibility_date": "2025-08-06",
+  "assets": {
+    "directory": "./dist/",
+    "not_found_handling": "single-page-application"
+  }
+}
