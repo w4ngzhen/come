@@ -8,7 +8,7 @@ export const IconLoading = (props: {
 }) => {
   return (
     <div
-      className={cls(styles.comeCommentBox__icon_loading, props.className)}
+      className={cls(styles.come_comment_box__icon_loading, props.className)}
       style={props.style}
     />
   );
