@@ -1,5 +1,5 @@
 import { Context, Next } from "hono";
-import { errRes } from "../../../utils/resp";
+import { errRes } from "../../utils/resp";
 
 export async function checkAdminToken(c: Context, next: Next) {
   const authKey = c.env.COME_ADMIN_AUTH_TOKEN;
