@@ -29,7 +29,7 @@ export const CommentItem = (props: IProps) => {
       <div className={styles.header}>
         <span className={styles.user_nickname}>
           {user_nickname}
-          <span>{`(${user_email})`}</span>
+          <span className={styles.user_email}>{`(${user_email})`}</span>
         </span>
         <span className={styles.time}>{`${displayTime}`}</span>
       </div>
